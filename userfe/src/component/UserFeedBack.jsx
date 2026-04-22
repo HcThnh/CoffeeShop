@@ -1,6 +1,6 @@
 import './UserFeedBack.css';
 import './UserProduct.css';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 function UserFeedBack({toggleVisibility, response, proID}) {

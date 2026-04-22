@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 function UserGiftHistory() {
-    const [err, setErr] = useState("");
+    const [, setErr] = useState("");
     const [gift, setGift] = useState([]);
 
     useEffect(() => {

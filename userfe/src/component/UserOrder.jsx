@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function UserOrder() {
     const [order, setOrder] = useState([]);
-    const [err, setErr] = useState("");
+    const [, setErr] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -31,7 +31,7 @@ function UserOrder() {
         fetchOrder();
     }, [])
 
-    const [prodList, setProdList] = useState([]);
+    const [, setProdList] = useState([]);
 
     useEffect(() => {
         const combinedProductList = order.reduce((acc, item) => {

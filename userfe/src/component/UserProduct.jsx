@@ -1,6 +1,5 @@
 import './UserProduct.css';
-import { useState } from 'react';
-import React, { useEffect, useRef }  from 'react';
+import { useEffect, useRef, useState }  from 'react';
 import axios from 'axios';
 import UserFeedBack from './UserFeedBack';
 
@@ -90,7 +89,7 @@ function UserProduct() {
         setShowFeedBack(false);
     }
 
-    const [errror, seterror] = useState("");
+    const [, seterror] = useState("");
     const[product, setproduct] = useState([]);
 
     const chunkArray = (arr, chunkSize) => {
@@ -108,15 +107,15 @@ function UserProduct() {
         return chunks;
     }
 
-    const [token, setToken] = useState("");
+    const [, setToken] = useState("");
 
     useEffect(() => {
         const Token = localStorage.getItem("token");
         setToken(Token);
-    })
+    }, [])
 
     useEffect(() => {
-        const FetchProduct = async (e) => {
+        const FetchProduct = async () => {
             try {
                 const token = localStorage.getItem("token");
                 const res = await axios.get(
@@ -166,11 +165,7 @@ function UserProduct() {
             seterror(err.message || "Something went worng!");
         }
     }
-
-    const [proID, setProID] = useState("");
-
     const proIdRef = useRef("");
-    const [rate, setRate] = useState(null);
 
     const handleProductClick = async(product, productId, prodRate) => {
         toggleDetail(product);

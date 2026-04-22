@@ -1,11 +1,11 @@
 import './UserGiftExchange.css'
-import React, { useState, useEffect, useRef }  from 'react';
+import { useState, useEffect, useRef }  from 'react';
 import axios from 'axios';
 import UserGiftHistory from './UserGiftHistory';
 
 
 function UserGiftExchange() {
-    const [err, setErr] = useState("");
+    const [,setErr] = useState("");
     const [gift, setGift] = useState([]);
     const [point, setPoint] = useState("");
 
@@ -67,7 +67,7 @@ function UserGiftExchange() {
         }
 
         try {
-            const res = await axios.post(
+            await axios.post(
                 "https://coffeeshop-api-udqx.onrender.com/customer/gift/exchange",
                 giftExchange, {
                     headers: {

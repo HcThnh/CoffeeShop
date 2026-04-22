@@ -6,8 +6,7 @@ import UserProduct from './component/UserProduct';
 import UserRegist from './component/UserRegist';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate
-  ,useNavigate
- } from 'react-router-dom';
+} from 'react-router-dom';
 
 
 function UserHomePage() {

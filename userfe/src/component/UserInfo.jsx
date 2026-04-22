@@ -1,8 +1,7 @@
 import './UserInfo.css';
-import { use, useRef } from 'react';
+import { useRef } from 'react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import React from 'react';
 import UserOrder from './UserOrder';
 
 
@@ -20,14 +19,13 @@ function UserFormInfo() {
         setSelectedGender(event.target.value);
     };
 
-    const [error, setError] = useState(null);
+    const [, setError] = useState(null);
 
     const handleClick=async (e) => {
         e.preventDefault();
         
         const name = nameRef.current.value.trim();
         const address = addressRef.current.value.trim();
-        const phone = phoneRef.current.value.trim();
         const dob = dobRef.current.value;
         const gender = document.querySelector('input[name="gender"]:checked');
 
@@ -157,13 +155,13 @@ function UserFormInfo() {
 
 function UserPersonalInfo({ toggle }) {
     const [userInfo, setuserInfo] = useState("");
-    const [error, setError] = useState(null);
+    const [, setError] = useState(null);
 
-    const deleteCus = async(e) => {
+    const deleteCus = async() => {
         const token = localStorage.getItem("token");
         console.log(token);
         try {
-            const res = await axios.delete(
+            await axios.delete(
                 "https://coffeeshop-api-udqx.onrender.com/customer/delete",
                 {
                     headers: {

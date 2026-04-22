@@ -2,19 +2,14 @@ import './UserRegist.css';
 import { useRef } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import React, { createContext }  from 'react';
 import { useNavigate } from "react-router-dom";
-
-const AuthContext = createContext();
-
-
 
 function UserRegistInterface({ toggle }) {
     const usernameRef = useRef();
     const passwordRef = useRef();
 
-    const [response, setResponse] = useState("");
-    const [error, setError] = useState(null);
+    const [, setResponse] = useState("");
+    const [, setError] = useState(null);
 
     const HandleClick=async (e)=> {
         e.preventDefault();
@@ -100,10 +95,10 @@ function UserLoginInterface({ toggle }) {
     const usernameRef = useRef();
     const passwordRef = useRef();
 
-    const [token, setToken] = useState("");
+    const [, setToken] = useState("");
 
-    const [response, setResponse] = useState("");
-    const [error, setError] = useState(null);
+    const [, setResponse] = useState("");
+    const [, setError] = useState(null);
     const navigate = useNavigate();
     const HandleClick=async (e)=> {
         e.preventDefault();
