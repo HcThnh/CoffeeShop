@@ -65,7 +65,7 @@ const Admin_Revenue = () => {
 
         try {
             const res = await axios.get(
-                "http://localhost:8080/manager/income",
+                "https://coffeeshop-api-udqx.onrender.com/manager/income",
                 {
                     params: { year, month }, // Truyền params đúng cách
                     headers: {

@@ -28,7 +28,7 @@ const Admin_ManageWorkSchedule = () => {
         const GetSchedule = async(e) => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/manager/view/schedule",
+                    "https://coffeeshop-api-udqx.onrender.com/manager/view/schedule",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

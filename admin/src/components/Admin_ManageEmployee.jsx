@@ -30,7 +30,7 @@ const Admin_ManageEmployee = () => {
 
             try {   
                 const res = await axios.get(
-                    "http://localhost:8080/manager/view/employees",
+                    "https://coffeeshop-api-udqx.onrender.com/manager/view/employees",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const Admin_ManageEmployee = () => {
         console.log(updateSal);
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/update/employee/salary",
+                "https://coffeeshop-api-udqx.onrender.com/manager/update/employee/salary",
                 updateSal, {
                     headers: {
                         Authorization: `Bearer ${token}`,

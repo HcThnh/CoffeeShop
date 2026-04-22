@@ -55,7 +55,7 @@ const Admin_ManageWorkSchedule_Edit = () => {
         const token = localStorage.getItem("token");
         try {
             const res = await axios.post(
-                "http://localhost:8080/manager/create/schedule",
+                "https://coffeeshop-api-udqx.onrender.com/manager/create/schedule",
                 schedule, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ const Admin_ManageWorkSchedule_Edit = () => {
         const token = localStorage.getItem("token");
         try {
             const res = await axios.post(
-                "http://localhost:8080/manager/create/shift",
+                "https://coffeeshop-api-udqx.onrender.com/manager/create/shift",
                 shift, {
                     headers: {
                         Authorization: `Bearer ${token}`,

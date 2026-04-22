@@ -29,7 +29,7 @@ function UserRegistInterface({ toggle }) {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/public/customer/createAccount", // URL API
+                "https://coffeeshop-api-udqx.onrender.com/public/customer/createAccount", // URL API
                 regist , // Dữ liệu gửi lên server
                 {
                     headers: {
@@ -118,7 +118,7 @@ function UserLoginInterface({ toggle }) {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/public/signin", // URL API
+                "https://coffeeshop-api-udqx.onrender.com/public/signin", // URL API
                 regist , // Dữ liệu gửi lên server
                 {
                     headers: {

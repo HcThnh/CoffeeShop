@@ -58,7 +58,7 @@ const Admin_ManageEmployee_Edit = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/manager/create/employee",
+                "https://coffeeshop-api-udqx.onrender.com/manager/create/employee",
                 EMP, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -94,7 +94,7 @@ const Admin_ManageEmployee_Edit = () => {
         console.log(update);
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/update/employee/job",
+                "https://coffeeshop-api-udqx.onrender.com/manager/update/employee/job",
                 update, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -117,7 +117,7 @@ const Admin_ManageEmployee_Edit = () => {
 
         try {
             const res = await axios.delete(
-                "http://localhost:8080/manager/delete/employee",
+                "https://coffeeshop-api-udqx.onrender.com/manager/delete/employee",
                 {
                     params: {id: idDelete},
                     headers: {

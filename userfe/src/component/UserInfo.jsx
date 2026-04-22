@@ -55,7 +55,7 @@ function UserFormInfo() {
 
         try {
             const res = await axios.patch(
-                "http://localhost:8080/customer/updateInfo",
+                "https://coffeeshop-api-udqx.onrender.com/customer/updateInfo",
                 user, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -164,7 +164,7 @@ function UserPersonalInfo({ toggle }) {
         console.log(token);
         try {
             const res = await axios.delete(
-                "http://localhost:8080/customer/delete",
+                "https://coffeeshop-api-udqx.onrender.com/customer/delete",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -185,7 +185,7 @@ function UserPersonalInfo({ toggle }) {
 
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/customer/info",
+                    "https://coffeeshop-api-udqx.onrender.com/customer/info",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

@@ -27,7 +27,7 @@ const Admin_ManageOrder = () => {
 
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/manager/view/orders",
+                    "https://coffeeshop-api-udqx.onrender.com/manager/view/orders",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

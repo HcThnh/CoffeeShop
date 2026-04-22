@@ -122,7 +122,7 @@ const Emp_OrderForm = () => {
     const getOrder = async(e) => {
       try {
         const token = await axios.get(
-          "http://localhost:8080/public/menu",
+          "https://coffeeshop-api-udqx.onrender.com/public/menu",
           {
             headers: {
               "Content-Type": "application/json",
@@ -180,7 +180,7 @@ const Emp_OrderForm = () => {
     console.log(order);
     try {
       const res = await axios.post(
-        "http://localhost:8080/employee/order/create",
+        "https://coffeeshop-api-udqx.onrender.com/employee/order/create",
         order, {
           headers: {
             Authorization: `Bearer ${token}`,

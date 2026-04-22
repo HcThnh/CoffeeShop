@@ -13,7 +13,7 @@ function UserGiftHistory() {
 
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/customer/gift/exchange/history",
+                    "https://coffeeshop-api-udqx.onrender.com/customer/gift/exchange/history",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

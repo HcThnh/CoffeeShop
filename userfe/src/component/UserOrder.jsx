@@ -12,7 +12,7 @@ function UserOrder() {
         const fetchOrder = async(e) => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/customer/order/view",
+                    "https://coffeeshop-api-udqx.onrender.com/customer/order/view",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

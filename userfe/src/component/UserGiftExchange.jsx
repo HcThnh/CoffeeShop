@@ -13,7 +13,7 @@ function UserGiftExchange() {
         const fetchGift = async(e) => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/public/gift/view",
+                    "https://coffeeshop-api-udqx.onrender.com/public/gift/view",
                     {
                         headers: {
                             "Content-Type": "application/json",
@@ -24,7 +24,7 @@ function UserGiftExchange() {
 
                 const token = localStorage.getItem("token");
                 const point = await axios.get(
-                    "http://localhost:8080/customer/point",
+                    "https://coffeeshop-api-udqx.onrender.com/customer/point",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ function UserGiftExchange() {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/customer/gift/exchange",
+                "https://coffeeshop-api-udqx.onrender.com/customer/gift/exchange",
                 giftExchange, {
                     headers: {
                         Authorization: `Bearer ${token}`,

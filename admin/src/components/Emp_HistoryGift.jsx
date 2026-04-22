@@ -26,7 +26,7 @@ const Emp_HistoryGift = () => {
         const getExchange = async(e) => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/employee/view/exchange",
+                    "https://coffeeshop-api-udqx.onrender.com/employee/view/exchange",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

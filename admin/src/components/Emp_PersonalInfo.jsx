@@ -18,7 +18,7 @@ const Emp_PersonalInfo = () => {
     const getInfo = async(e) => {
       try {
         const res = await axios.get(
-          "http://localhost:8080/employee/get/info",
+          "https://coffeeshop-api-udqx.onrender.com/employee/get/info",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const Emp_PersonalInfo = () => {
 
     try {
       const res = await axios.patch(
-        "http://localhost:8080/employee/update/info",
+        "https://coffeeshop-api-udqx.onrender.com/employee/update/info",
         emp, {
           headers: {
             Authorization: `Bearer ${token}`,

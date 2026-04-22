@@ -24,7 +24,7 @@ const Admin_ManageProduct = () => {
         const getProduct = async(e) => {
             try {
                 const res = await axios.get(
-                    "http://localhost:8080/public/menu",
+                    "https://coffeeshop-api-udqx.onrender.com/public/menu",
                     {
                         headers: {
                             "Content-Type": "application/json",

@@ -46,7 +46,7 @@ const DangNhap = ({ onLog }) => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/public/signin",
+                "https://coffeeshop-api-udqx.onrender.com/public/signin",
                 admin, {
                     headers: {
                         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const DangNhap = ({ onLog }) => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/public/admin",
+                "https://coffeeshop-api-udqx.onrender.com/public/admin",
                 admin, {
                     headers: {
                         "Content-Type": "application/json",

@@ -120,7 +120,7 @@ function UserProduct() {
             try {
                 const token = localStorage.getItem("token");
                 const res = await axios.get(
-                    "http://localhost:8080/public/menu",
+                    "https://coffeeshop-api-udqx.onrender.com/public/menu",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -148,7 +148,7 @@ function UserProduct() {
     const fetchReview = async(productID) => {
         try {
             const item = await axios.get(
-                `http://localhost:8080/public/product/review`,
+                `https://coffeeshop-api-udqx.onrender.com/public/product/review`,
                 {
                     params: {productId: productID},
                     headers: {

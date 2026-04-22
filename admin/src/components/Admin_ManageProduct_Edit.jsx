@@ -29,7 +29,7 @@ const Admin_ManageProduct_Edit = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/manager/create/product",
+                "https://coffeeshop-api-udqx.onrender.com/manager/create/product",
                 prodCreate, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ const Admin_ManageProduct_Edit = () => {
         console.log(modify);
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/update/product",
+                "https://coffeeshop-api-udqx.onrender.com/manager/update/product",
                 modify, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -92,7 +92,7 @@ const Admin_ManageProduct_Edit = () => {
 
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/delete/product", 
+                "https://coffeeshop-api-udqx.onrender.com/manager/delete/product", 
                 {}, {
                     params: {id: idDelete},
                     headers: {
@@ -123,7 +123,7 @@ const Admin_ManageProduct_Edit = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:8080/manager/create/gift",
+                "https://coffeeshop-api-udqx.onrender.com/manager/create/gift",
                 gift, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -157,7 +157,7 @@ const Admin_ManageProduct_Edit = () => {
 
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/update/gift",
+                "https://coffeeshop-api-udqx.onrender.com/manager/update/gift",
                 modify, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -183,7 +183,7 @@ const Admin_ManageProduct_Edit = () => {
 
         try {
             const res = await axios.patch(
-                "http://localhost:8080/manager/delete/gift",
+                "https://coffeeshop-api-udqx.onrender.com/manager/delete/gift",
                 {}, {
                     params: {id: idDel},
                     headers: {
