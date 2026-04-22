@@ -21,7 +21,7 @@ function UserFeedBack({toggleVisibility, response, proID}) {
         setSelectedRating(Number(event.target.value)); 
     };
 
-    const [err, setErr] = useState("");
+    const [, setErr] = useState("");
     const [token, setToken] = useState("");
 
     const CheckToken = () => {
