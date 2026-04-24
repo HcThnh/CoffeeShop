@@ -48,7 +48,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain MySecurityFilterChain(HttpSecurity http) throws Exception{
         http.cors(withDefaults()).authorizeHttpRequests(authorizeRequests ->
-        authorizeRequests.requestMatchers("/public/**").permitAll()
+        authorizeRequests
+                        .requestMatchers("/public/**", "/error").permitAll()
                         .anyRequest().authenticated()
         );
         // .logout((logout) ->
