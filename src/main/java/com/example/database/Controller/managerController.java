@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RestController
@@ -65,6 +66,7 @@ public class managerController {
     @Autowired
     exchangeService exchangeService;
 
+    @Transactional
     @PostMapping("create/employee")
     public String createEmployee(@RequestBody employeeDto dto) 
     {
