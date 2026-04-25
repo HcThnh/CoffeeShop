@@ -8,6 +8,7 @@ public class customerMapper {
         var customer = new customer();
         customer.setPhoneNumber(dto.phoneNumber());
         customer.setPassword(dto.password());
+        customer.setGender('U'); // default: Unknown, tránh NOT NULL constraint của PostgreSQL
         return customer;
     }
     public customerResponseDTO toCustomerResponseDTO(customer customer){

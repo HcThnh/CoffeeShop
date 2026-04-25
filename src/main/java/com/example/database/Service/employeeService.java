@@ -10,7 +10,6 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Employee.employee;
 import com.example.database.Employee.employeeCalSalaryDto;
 import com.example.database.Employee.employeeDto;
 import com.example.database.Employee.employeeMapper;
