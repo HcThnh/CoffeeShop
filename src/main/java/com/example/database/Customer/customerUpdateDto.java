@@ -7,7 +7,7 @@ public record customerUpdateDto(
     Date dob,
     String phoneNumber,
     String address,
-    char gender,
+    Character gender,
     String name) {
     
 }
