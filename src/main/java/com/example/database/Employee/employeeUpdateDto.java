@@ -8,7 +8,7 @@ public record employeeUpdateDto(
     Date dob,
     String phoneNumber,
     String address,
-    char gender,
+    Character gender,
     String name
     ) {
     

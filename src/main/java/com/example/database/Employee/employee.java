@@ -29,7 +29,7 @@ public class employee {
     private Date dob;
     private String phoneNumber;
     private String address;
-    private char gender;
+    private Character gender;
     private String name;
     private Date startDate;
     private String position;   //create enum: manager, cashier, barista, waiter

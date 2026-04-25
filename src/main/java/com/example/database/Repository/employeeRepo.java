@@ -23,7 +23,7 @@ public interface employeeRepo extends JpaRepository<employee,Integer>{
     @Query("update employee a set a.dob=:dob,a.address=:address,a.gender=:gender,a.name=:name where a.phoneNumber=:phoneNumber")
     public void updateEmployeeInfo(@Param("dob") Date dob,
                                     @Param("address") String address,
-                                    @Param("gender") char gender,
+                                    @Param("gender") Character gender,
                                     @Param("name") String name,
                                     @Param("phoneNumber") String phoneNumber
                                    );

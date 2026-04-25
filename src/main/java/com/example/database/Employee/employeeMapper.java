@@ -10,6 +10,7 @@ public class employeeMapper {
         employee.setPosition(dto.position());
         employee.setPhoneNumber(dto.phoneNumber());
         employee.setPassword(dto.password());
+        employee.setGender('U');
         return employee;
     }
     public employeeResponseDto tEmployeeResponseDto(employee employee){
