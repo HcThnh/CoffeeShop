@@ -193,9 +193,6 @@ function UserPersonalInfo({ toggle, userInfo, fetchError }) {
                     <h2 className="text-2xl font-bold text-white mb-1">
                         {userInfo?.name || "Tên khách hàng"}
                     </h2>
-                    <span className="inline-flex items-center bg-stone-700/50 text-amber-400 px-3 py-1 rounded-full text-xs font-bold border border-stone-600">
-                        Thành viên thân thiết
-                    </span>
                 </div>
             </div>
 
