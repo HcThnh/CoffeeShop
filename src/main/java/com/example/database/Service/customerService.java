@@ -1,5 +1,6 @@
 package com.example.database.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,15 +35,20 @@ public class customerService {
     DataSource dataSource;
 
     public customerUpdateDto getInfo(String phoneNumber){
-        return customerMapper.tCustomerUpdateDto( repo.findByPhoneNumber(phoneNumber));
+        var customer = repo.findByPhoneNumber(phoneNumber);
+        if (customer == null) return null;
+        return customerMapper.tCustomerUpdateDto(customer);
     }
     public List<exchangeResponseDto> getExchange(String phoneNumber){
-        return repo.findByPhoneNumber(phoneNumber)
-        .getExchanges().stream().map(exchangeMapper::tExchangeResponseDto)
+        var customer = repo.findByPhoneNumber(phoneNumber);
+        if (customer == null) return Collections.emptyList();
+        return customer.getExchanges().stream().map(exchangeMapper::tExchangeResponseDto)
         .collect(Collectors.toList());
     }
     public List<orderResponseDto> getOrder(String phoneNumber){
-        return repo.findByPhoneNumber(phoneNumber).get_orders()
+        var customer = repo.findByPhoneNumber(phoneNumber);
+        if (customer == null) return Collections.emptyList();
+        return customer.get_orders()
         .stream().map(orderMapper::tOrderResponseDto).collect(Collectors.toList());
     }
     public void createCustomer(customerDTO dto){
@@ -58,6 +64,8 @@ public class customerService {
         repo.updateCustomerInfo(dto.dob(),dto.address(),dto.gender(),dto.name(),dto.phoneNumber());
     }
     public int getPoint(String phoneNumber){
-        return repo.findByPhoneNumber(phoneNumber).getPoint();
+        var customer = repo.findByPhoneNumber(phoneNumber);
+        if (customer == null) return 0;
+        return customer.getPoint();
     }
 }

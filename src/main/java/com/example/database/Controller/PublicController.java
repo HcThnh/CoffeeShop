@@ -1,6 +1,5 @@
 package com.example.database.Controller;
 
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +19,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.database.Customer.customerDTO;
 import com.example.database.Gift.giftResponseDto;
 import com.example.database.Product.productResponseDto;
-import com.example.database.Relationship.exchangeResponseDto;
 import com.example.database.Relationship.reviewResponseDto;
 import com.example.database.Service.customerService;
 import com.example.database.Service.giftService;
@@ -89,6 +87,7 @@ public class PublicController {
 
         return ResponseEntity.ok(response);
     }
+    @Transactional
     @PostMapping("customer/createAccount")
     public String createCustomer(@RequestBody customerDTO dto) 
     {

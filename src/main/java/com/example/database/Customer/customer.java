@@ -27,7 +27,7 @@ public class customer {
     private Date dob;
     private String phoneNumber; //function as username
     private String address;
-    private char gender;
+    private Character gender;
     private String name;
     private int point;
     private String password;
