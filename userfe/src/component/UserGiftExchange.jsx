@@ -1,165 +1,257 @@
-import './UserGiftExchange.css'
-import { useState, useEffect, useRef }  from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserGiftHistory from './UserGiftHistory';
 
-
 function UserGiftExchange() {
-    const [,setErr] = useState("");
+    const [err, setErr] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
     const [gift, setGift] = useState([]);
-    const [point, setPoint] = useState("");
+    const [point, setPoint] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+    const [giftHistory, setHistory] = useState(false);
+
+    const fetchGiftAndPoint = async () => {
+        try {
+            const res = await axios.get(
+                "https://coffeeshop-api-udqx.onrender.com/public/gift/view",
+                { headers: { "Content-Type": "application/json" } }
+            );
+            setGift(res.data);
+
+            const token = localStorage.getItem("token");
+            const pointRes = await axios.get(
+                "https://coffeeshop-api-udqx.onrender.com/customer/point",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
+            setPoint(pointRes.data);
+        } catch (error) {
+            setErr(error.message || "Không thể tải danh sách quà tặng.");
+        }
+    };
 
     useEffect(() => {
-        const fetchGift = async(e) => {
-            try {
-                const res = await axios.get(
-                    "https://coffeeshop-api-udqx.onrender.com/public/gift/view",
-                    {
-                        headers: {
-                            "Content-Type": "application/json",
-                        }
-                    }
-                )
-                setGift(res.data);
-
-                const token = localStorage.getItem("token");
-                const point = await axios.get(
-                    "https://coffeeshop-api-udqx.onrender.com/customer/point",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "application/json",
-                        }
-                    }
-                )
-
-                setPoint(point.data);
-            }
-            catch(err) {
-                setErr(err.message || "Something went wrong!")
-            }
-        }
-        
-        fetchGift();
-    }, [])
+        fetchGiftAndPoint();
+    }, []);
 
     const getCurrentDate = () => {
         const today = new Date(); 
-    
         const day = String(today.getDate()).padStart(2, '0'); 
         const month = String(today.getMonth() + 1).padStart(2, '0'); 
         const year = today.getFullYear();
-    
         return `${year}-${month}-${day}`;
     };
 
-    const SendGift = async(e) => {
-        const token = localStorage.getItem("token");
-
-        const date = getCurrentDate();
-        const giftId = selectedData.current.id;
-        const quantity = 1;
-
-        const giftExchange = {
-            giftId: giftId,
-            quantity: quantity,
-            date: date
+    const SendGift = async () => {
+        if (!selectedId) {
+            setErr("Vui lòng chọn một món quà để đổi!");
+            setSuccessMsg("");
+            return;
         }
+
+        const selectedGift = gift.find(g => g.id === selectedId);
+        if (selectedGift && point < selectedGift.point) {
+            setErr("Bạn không đủ điểm để đổi món quà này!");
+            setSuccessMsg("");
+            return;
+        }
+
+        setIsLoading(true);
+        setErr("");
+        setSuccessMsg("");
+        
+        const token = localStorage.getItem("token");
+        const date = getCurrentDate();
+        
+        const giftExchange = {
+            giftId: selectedId,
+            quantity: 1,
+            date: date
+        };
 
         try {
             await axios.post(
                 "https://coffeeshop-api-udqx.onrender.com/customer/gift/exchange",
-                giftExchange, {
+                giftExchange, 
+                {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
                 }
-            )
+            );
+            setSuccessMsg(`Đổi quà thành công! Bạn đã dùng ${selectedGift.point} điểm.`);
+            setSelectedId(null);
+            fetchGiftAndPoint();
+        } catch (error) {
+            setErr(error.response?.data?.message || error.message || "Đã có lỗi xảy ra khi đổi quà!");
+        } finally {
+            setIsLoading(false);
         }
-        catch(err) {
-            setErr(err.message || "Something went wrong!")
-        }
-    }
-    const selectedData = useRef({id: "", point: ""})
-
-    const [giftHistory, setHistory] = useState(false);
+    };
 
     const HandleGiftHistory = () => {
         setHistory((prev) => !prev);
-    }
+    };
 
     return (
-        <>
-            <div className="gift_exchange">
-                <div className="gift_exchange-middle">
-                    <h6 className="gift-exchange-title">
-                        Đổi quà
-                    </h6>
-                    <div className="gift-under-title">
-                        <div className="box-giftPoint">
-                            <div className="box-giftPoint-left">
-                                <ul className="box-giftPoint-left-ul">
-                                    <li className="box-giftPoint-left-li
-                                    box-giftPoint-left-li1">
-                                        Điểm của bạn
-                                    </li>
-                                    <li className="box-giftPoint-left-li">
-                                        <svg xmlns="http://www.w3.org/2000/svg" 
-                                        viewBox="0 0 512 512"
-                                        className="box-giftPoint-li-svg">
-                                            <path d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
+        <div className="bg-stone-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 font-sans">
+            <div className="max-w-5xl mx-auto">
+                <div className="text-center mb-10 mt-16">
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-stone-800 tracking-tight">
+                        Chương Trình <span className="text-amber-600">Khách Hàng Thân Thiết</span>
+                    </h2>
+                    <p className="mt-3 text-lg text-stone-500">
+                        Tích lũy điểm thưởng và đổi lấy những phần quà hấp dẫn từ Coffee Shop.
+                    </p>
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Left Panel: Points Info */}
+                    <div className="lg:w-1/3 space-y-6">
+                        <div className="bg-white rounded-3xl shadow-xl shadow-stone-200/50 p-8 border border-stone-100 relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-100 rounded-full mix-blend-multiply opacity-50 transition-transform group-hover:scale-110"></div>
+                            
+                            <h3 className="text-lg font-bold text-stone-600 mb-2 relative z-10">Điểm hiện tại của bạn</h3>
+                            <div className="flex items-center space-x-3 mb-6 relative z-10">
+                                <div className="bg-amber-100 text-amber-600 p-3 rounded-2xl">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 24 24" fill="currentColor">
+                                      <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
+                                    </svg>
+                                </div>
+                                <span className="text-5xl font-black text-stone-800 tracking-tight">{point}</span>
+                            </div>
+                            
+                            <button 
+                                onClick={HandleGiftHistory}
+                                className="w-full flex items-center justify-center space-x-2 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold py-3 px-4 rounded-xl transition-colors relative z-10"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Lịch sử đổi quà</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Right Panel: Gift Options */}
+                    <div className="lg:w-2/3 bg-white rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-100 p-8">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-2xl font-bold text-stone-800">Danh sách quà tặng</h3>
+                            <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">
+                                {gift.length} lựa chọn
+                            </span>
+                        </div>
+
+                        {err && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium mb-6 border border-red-100 flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                            {err}
+                        </div>}
+                        
+                        {successMsg && <div className="bg-green-50 text-green-600 p-4 rounded-xl text-sm font-medium mb-6 border border-green-100 flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                            {successMsg}
+                        </div>}
+
+                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-stone-200">
+                            {gift.map((item) => (
+                                <div 
+                                    key={item.id}
+                                    onClick={() => setSelectedId(item.id)}
+                                    className={`relative flex items-center p-5 rounded-2xl border-2 transition-all cursor-pointer ${
+                                        selectedId === item.id 
+                                            ? 'border-amber-500 bg-amber-50/50 shadow-md' 
+                                            : 'border-stone-100 bg-white hover:border-amber-200 hover:bg-stone-50'
+                                    }`}
+                                >
+                                    {/* Selection Indicator */}
+                                    <div className={`shrink-0 w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center ${
+                                        selectedId === item.id ? 'border-amber-500 bg-amber-500' : 'border-stone-300 bg-white'
+                                    }`}>
+                                        {selectedId === item.id && (
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                            </svg>
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1">
+                                        <h4 className={`text-lg font-bold ${selectedId === item.id ? 'text-amber-900' : 'text-stone-800'}`}>
+                                            {item.name}
+                                        </h4>
+                                    </div>
+
+                                    <div className="shrink-0 flex items-center space-x-1.5 bg-white border border-stone-200 px-3 py-1.5 rounded-lg">
+                                        <span className="font-extrabold text-amber-600">{item.point}</span>
+                                        <span className="text-xs font-bold text-stone-500 uppercase">Điểm</span>
+                                    </div>
+                                </div>
+                            ))}
+                            
+                            {gift.length === 0 && (
+                                <div className="text-center py-10">
+                                    <p className="text-stone-500">Đang tải danh sách quà tặng...</p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="mt-8 pt-6 border-t border-stone-100">
+                            <button 
+                                onClick={SendGift}
+                                disabled={isLoading || !selectedId}
+                                className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all transform flex items-center justify-center space-x-2
+                                    ${(!selectedId || isLoading) 
+                                        ? 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none' 
+                                        : 'bg-amber-600 hover:bg-amber-700 text-white hover:shadow-xl hover:-translate-y-1'
+                                    }`}
+                            >
+                                {isLoading ? (
+                                    <span>Đang xử lý...</span>
+                                ) : (
+                                    <>
+                                        <span>Xác nhận đổi quà</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
                                         </svg>
-                                        {point}
-                                    </li>
-                                    <li className="box-giftPoint-left-li
-                                    box-giftPoint-left-historyExchange"
-                                    onClick={() => HandleGiftHistory()}>
-                                        Lịch sử đổi quà
-                                    </li>
-                                </ul>
-                            </div>
-                            <div className="box-giftPoint-right">
-                                <ul className="box-giftPoint-right-ul">
-                                    {gift.map((item, idx) => (
-                                        <li className={`box-giftPoint-right-li
-                                            ${idx === 0 ? 'box-giftPoint-right-li1' : ''}
-                                            ${idx === gift.length - 1 ? 'box-giftPoint-right-lastli' : ''}`
-                                        }
-                                        key={item.id}>
-                                            <p className="box-giftPoint-right-p">
-                                                {item.name}
-                                            </p>
-                                            <div className="box-giftPoint-right-box">
-                                                <svg xmlns="http://www.w3.org/2000/svg" 
-                                                viewBox="0 0 512 512"
-                                                className="box-giftPoint-li-svg">
-                                                    <path d="M512 80c0 18-14.3 34.6-38.4 48c-29.1 16.1-72.5 27.5-122.3 30.9c-3.7-1.8-7.4-3.5-11.3-5C300.6 137.4 248.2 128 192 128c-8.3 0-16.4 .2-24.5 .6l-1.1-.6C142.3 114.6 128 98 128 80c0-44.2 86-80 192-80S512 35.8 512 80zM160.7 161.1c10.2-.7 20.7-1.1 31.3-1.1c62.2 0 117.4 12.3 152.5 31.4C369.3 204.9 384 221.7 384 240c0 4-.7 7.9-2.1 11.7c-4.6 13.2-17 25.3-35 35.5c0 0 0 0 0 0c-.1 .1-.3 .1-.4 .2c0 0 0 0 0 0s0 0 0 0c-.3 .2-.6 .3-.9 .5c-35 19.4-90.8 32-153.6 32c-59.6 0-112.9-11.3-148.2-29.1c-1.9-.9-3.7-1.9-5.5-2.9C14.3 274.6 0 258 0 240c0-34.8 53.4-64.5 128-75.4c10.5-1.5 21.4-2.7 32.7-3.5zM416 240c0-21.9-10.6-39.9-24.1-53.4c28.3-4.4 54.2-11.4 76.2-20.5c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 19.3-16.5 37.1-43.8 50.9c-14.6 7.4-32.4 13.7-52.4 18.5c.1-1.8 .2-3.5 .2-5.3zm-32 96c0 18-14.3 34.6-38.4 48c-1.8 1-3.6 1.9-5.5 2.9C304.9 404.7 251.6 416 192 416c-62.8 0-118.6-12.6-153.6-32C14.3 370.6 0 354 0 336l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 342.6 135.8 352 192 352s108.6-9.4 148.1-25.9c7.8-3.2 15.3-6.9 22.4-10.9c6.1-3.4 11.8-7.2 17.2-11.2c1.5-1.1 2.9-2.3 4.3-3.4l0 3.4 0 5.7 0 26.3zm32 0l0-32 0-25.9c19-4.2 36.5-9.5 52.1-16c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 10.5-5 21-14.9 30.9c-16.3 16.3-45 29.7-81.3 38.4c.1-1.7 .2-3.5 .2-5.3zM192 448c56.2 0 108.6-9.4 148.1-25.9c16.3-6.8 31.5-15.2 43.9-25.5l0 35.4c0 44.2-86 80-192 80S0 476.2 0 432l0-35.4c12.5 10.3 27.6 18.7 43.9 25.5C83.4 438.6 135.8 448 192 448z"/>
-                                                </svg>
-                                                {item.point}
-                                                <label className="box-giftPoint-right-label">
-                                                    Chọn
-                                                    <input type="radio" className="box-giftPoint-right-input" 
-                                                    name='voucher' value={item.point}
-                                                    onChange={() => {
-                                                        selectedData.current = {id: item.id, point: item.point}
-                                                    }}/>
-                                                </label>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button className="box-giftPoint-right-button"
-                                onClick={() => {SendGift()}}>
-                                    Đổi quà
-                                </button>
-                            </div>
+                                    </>
+                                )}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            {giftHistory && <UserGiftHistory/>}
-        </>
+
+            {giftHistory && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div 
+                        className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"
+                        onClick={HandleGiftHistory}
+                    ></div>
+                    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden flex flex-col relative z-10 animate-fade-in-up">
+                        <button 
+                            onClick={HandleGiftHistory}
+                            className="absolute top-4 right-4 p-2 bg-stone-100 hover:bg-stone-200 rounded-full text-stone-600 transition-colors z-20"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <div className="flex-1 overflow-y-auto p-8">
+                            <UserGiftHistory />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 
