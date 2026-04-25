@@ -16,7 +16,8 @@ public class WebConfig implements WebMvcConfigurer{
                 .allowedOrigins("http://localhost:3000",
                 "http://localhost:5173",
                 "http://127.0.0.1:5173",
-                "https://coffee-shop-bice.vercel.app")
+                "https://coffee-shop-bice.vercel.app",
+                "https://coffee-shop-itfn.vercel.app")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);
