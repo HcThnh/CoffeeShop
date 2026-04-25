@@ -7,14 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.database.Customer.customerMapper;
-import com.example.database.Employee.employeeMapper;
 import com.example.database.Product.productInOrderResponseDto;
-import com.example.database.Product.productMapper;
 import com.example.database.Relationship.has;
 import com.example.database.Repository.customerRepo;
 import com.example.database.Repository.employeeRepo;
-import com.example.database.Repository.hasRepo;
 import com.example.database.Repository.orderRepo;
 import com.example.database.Repository.productRepo;
 
@@ -26,14 +22,7 @@ public class orderMapper {
     private employeeRepo employeeRepo;
     @Autowired
     private productRepo productRepo;
-    @Autowired
-    private customerMapper customerMapper;
-    @Autowired
-    private productMapper productMapper;
-    @Autowired
-    private employeeMapper employeeMapper;
-    @Autowired
-    private hasRepo hasRepo;
+    
     @Autowired
     orderRepo orderRepo;
     

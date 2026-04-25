@@ -283,7 +283,7 @@ function UserProduct() {
 
             {/* Overlays */}
             {showFeedBack ? (
-                <UserFeedBack toggleVisibility={toggleDetail} response={response} proID={proIdRef.current}/>
+                <UserFeedBack toggleVisibility={toggleDetail} response={response} proID={proIdRef.current} selectedProduct={selectedProduct} />
             ) : (
                 <UserDetailProduct 
                     toggle={toggle} 

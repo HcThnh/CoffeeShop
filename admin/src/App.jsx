@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import DangNhap from './components/DangNhap'; 
 import Admin_HomePage from './components/Admin_HomePage'; 
@@ -7,7 +6,6 @@ import Admin_ManageEmployee from './components/Admin_ManageEmployee';
 import Admin_ManageProduct from './components/Admin_ManageProduct'; 
 import Admin_ManageOrder from './components/Admin_ManageOrder'; 
 
-import Emp_Header from './components/Emp_Header'; 
 import Emp_OrderForm from './components/Emp_OrderForm'; 
 import Emp_HistoryGift from './components/Emp_HistoryGift'; 
 import Emp_PersonalInfo from './components/Emp_PersonalInfo';
@@ -92,7 +90,10 @@ const App = () => {
           <Route path="/*" element={<HomePageAdmin onLogout={handleLogout}/>} />
         )}
 
-        {!token && <Route path="*" element={<Navigate to="/login" replace />} />}
+        {/* Nếu chưa đăng nhập HOẶC có token nhưng quyền không hợp lệ (ví dụ: đang dùng token của ROLE_CUSTOMER) */}
+        {(!token || (roles !== "ROLE_EMPLOYEE" && roles !== "ROLE_MANAGER")) && (
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        )}
       </Routes>
     </Router>
   );
