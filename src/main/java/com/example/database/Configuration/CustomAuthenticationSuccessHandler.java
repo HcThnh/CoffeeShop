@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
-import javax.management.relation.Role;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -26,9 +24,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> listRole = userDetails.getAuthorities();
         String url;
         for(var i: listRole){
-            if(i.getAuthority()=="ROLE_CUSTOMER") url=""; //homepage of customer
-            if(i.getAuthority()=="ROLE_EMPLOYEE") url="http://localhost:5173/emp/order-form";
-            if(i.getAuthority()=="ROLE_MANAGER") url="http://localhost:5173/admin/home";
+            if(i.getAuthority().equals("ROLE_CUSTOMER")) url=""; //homepage of customer
+            if(i.getAuthority().equals("ROLE_EMPLOYEE")) url="http://localhost:5173/emp/order-form";
+            if(i.getAuthority().equals("ROLE_MANAGER")) url="http://localhost:5173/admin/home";
         }
         response.sendRedirect("url");
     }
