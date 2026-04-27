@@ -30,7 +30,7 @@ function UserDetailProduct({ toggle, toggleVisibility, response, toggleFeedBack,
                 <div className="flex-1 overflow-y-auto p-6">
                     <div className="mb-8 rounded-2xl overflow-hidden shadow-md">
                         <img 
-                            src={require(`../img/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg`)} 
+                            src="/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg" 
                             alt={selectedProduct?.name || "Product"} 
                             className="w-full h-64 object-cover"
                         />
@@ -67,7 +67,7 @@ function UserDetailProduct({ toggle, toggleVisibility, response, toggleFeedBack,
                                         <div className="flex items-start justify-between mb-3">
                                             <div className="flex items-center">
                                                 <div className="w-10 h-10 rounded-full bg-amber-200 overflow-hidden mr-3 border-2 border-white shadow-sm">
-                                                    <img src={require(`../img/Avatar.png`)} alt="avatar" className="w-full h-full object-cover"/>
+                                                    <img src="/Avatar.png" alt="avatar" className="w-full h-full object-cover"/>
                                                 </div>
                                                 <div>
                                                     <p className="font-bold text-gray-800 text-sm">{item.customerName}</p>
@@ -208,7 +208,7 @@ function UserProduct() {
                                 >
                                     <div className="aspect-[4/3] w-full overflow-hidden bg-gray-200">
                                         <img 
-                                            src={require(`../img/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg`)} 
+                                            src="/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg" 
                                             alt={item.name} 
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                                         />
@@ -252,8 +252,8 @@ function UserProduct() {
                         >
                             <div className="relative aspect-square overflow-hidden bg-gray-100">
                                 <img 
-                                    src={require(`../img/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg`)} 
-                                    alt={item.name} 
+                                    src="/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg"
+                                    alt={item.name}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
                                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg shadow-sm flex items-center space-x-1">

@@ -73,7 +73,7 @@ function UserFeedBack({toggleVisibility, response, proID, selectedProduct}) {
                 <div className="bg-stone-50 w-full md:w-2/5 p-6 md:p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-stone-100">
                     <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg border-4 border-white mb-4">
                         <img 
-                            src={require(`../img/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg`)} 
+                            src="/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg"
                             alt={productName} 
                             className="w-full h-full object-cover"
                         />

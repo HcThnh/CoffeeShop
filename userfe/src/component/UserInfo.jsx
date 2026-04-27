@@ -187,7 +187,7 @@ function UserPersonalInfo({ toggle, userInfo, fetchError }) {
             
             <div className="flex items-center space-x-5 mb-8">
                 <div className="w-20 h-20 rounded-full border-4 border-stone-600 overflow-hidden shadow-lg bg-stone-200 shrink-0">
-                    <img src={require(`../img/Avatar.png`)} alt="Avatar" className="w-full h-full object-cover"/>
+                    <img src="/Avatar.png" alt="Avatar" className="w-full h-full object-cover"/>
                 </div>
                 <div>
                     <h2 className="text-2xl font-bold text-white mb-1">

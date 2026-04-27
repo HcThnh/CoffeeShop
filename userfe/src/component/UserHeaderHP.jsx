@@ -84,7 +84,7 @@ function HeaderHomePage() {
                                 <Link to="/customer/info">
                                     <div className="w-10 h-10 rounded-full border-2 border-amber-200 overflow-hidden group-hover:border-amber-500 transition-colors shadow-sm bg-stone-100">
                                         <img 
-                                            src={require(`../img/Avatar.png`)} 
+                                            src="/Avatar.png" 
                                             alt="User Avatar" 
                                             className="w-full h-full object-cover"
                                         />
@@ -133,10 +133,10 @@ function HeaderHomePage() {
                     </div>
                     <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 flex h-64 sm:h-80 md:h-96 lg:h-full">
                         <div className="w-1/2 h-full">
-                            <img className="w-full h-full object-cover" src={require(`../img/cf.jpg`)} alt="Coffee" />
+                            <img className="w-full h-full object-cover" src="/cf.jpg" alt="Coffee" />
                         </div>
                         <div className="w-1/2 h-full">
-                            <img className="w-full h-full object-cover" src={require(`../img/pexels-goumbik-942768.jpg`)} alt="Coffee shop interior" />
+                            <img className="w-full h-full object-cover" src="/pexels-goumbik-942768.jpg" alt="Coffee shop interior" />
                         </div>
                     </div>
                 </div>

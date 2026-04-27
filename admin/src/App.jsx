@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import DangNhap from './components/DangNhap'; 
-import Admin_HomePage from './components/Admin_HomePage'; 
 import Admin_ManageWorkSchedule from './components/Admin_ManageWorkSchedule'; 
 import Admin_ManageEmployee from './components/Admin_ManageEmployee'; 
 import Admin_ManageProduct from './components/Admin_ManageProduct'; 
@@ -24,7 +23,7 @@ function Login( {onLogin}) {
   );
 }
 
-function HomePageEmp({ onLogOut}) {
+function HomePageEmp() {
   return (
       <Routes>
         <Route path="/emp/order-form" element={<Emp_OrderForm />} />
@@ -36,10 +35,9 @@ function HomePageEmp({ onLogOut}) {
   );
 }
 
-function HomePageAdmin({ onLogOut }) {
+function HomePageAdmin() {
   return (
       <Routes>
-        <Route path="/admin/home" element={<Admin_HomePage />} />
         <Route path="/admin/manage-work-schedule" element={<Admin_ManageWorkSchedule />} />
         <Route path="/admin/manage-employee" element={<Admin_ManageEmployee />} />
         <Route path="/admin/manage-product" element={<Admin_ManageProduct />} />
@@ -49,7 +47,7 @@ function HomePageAdmin({ onLogOut }) {
         <Route path="/admin/manage-product/edit" element={<Admin_ManageProduct_Edit />} /> 
         <Route path="/admin/revenue" element={<Admin_Revenue />} /> 
 
-        <Route path='*' element={<Navigate to="/admin/home" replace/>}/>
+        <Route path='*' element={<Navigate to="/admin/manage-work-schedule" replace/>}/>
       </Routes>
   );
 }
