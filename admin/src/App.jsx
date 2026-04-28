@@ -14,6 +14,7 @@ import Admin_ManageProduct_Edit from './components/Admin_ManageProduct_Edit';
 import Admin_Revenue from './components/Admin_Revenue';
 
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Login( {onLogin}) {
   return (
@@ -70,6 +71,29 @@ const App = () => {
     setRoles(storedRoles);
   }, []);
 
+  // Axios interceptor: tự động xóa token và redirect về /login khi API trả về 401
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("roles");
+          setToken(null);
+          setRoles(null);
+          // Redirect cứng về /login
+          window.location.replace("/login");
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // Cleanup interceptor khi component unmount
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -88,7 +112,7 @@ const App = () => {
           <Route path="/*" element={<HomePageAdmin onLogout={handleLogout}/>} />
         )}
 
-        {/* Nếu chưa đăng nhập HOẶC có token nhưng quyền không hợp lệ (ví dụ: đang dùng token của ROLE_CUSTOMER) */}
+        {/* Nếu chưa đăng nhập HOẶC có token nhưng quyền không hợp lệ */}
         {(!token || (roles !== "ROLE_EMPLOYEE" && roles !== "ROLE_MANAGER")) && (
           <Route path="*" element={<Navigate to="/login" replace />} />
         )}
