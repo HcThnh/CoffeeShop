@@ -28,7 +28,7 @@ const Admin_Header = () => {
                         Coffee<span className='text-amber-600'>Shop</span>
                     </h1>
                 </div>
-                <nav className='flex items-center space-x-4 md:space-x-10'>
+                <nav className='items-center space-x-4 md:space-x-10 hidden md:flex'>
                     <Link to="/admin/manage-work-schedule"
                     className={`font-bold group text-sm md:text-base transition-colors
                     ${isActive("manage-work-schedule") ? "text-amber-600" : "text-stone-600 hover:text-amber-600"}`}>
@@ -57,7 +57,7 @@ const Admin_Header = () => {
                 </nav>
                 <button 
                     onClick={handleLogout}
-                    className="hidden md:flex items-center space-x-1 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-600 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+                    className="flex items-center space-x-1 bg-stone-100 hover:bg-red-50 text-stone-600 hover:text-red-600 px-4 py-2 rounded-xl text-sm font-bold transition-all"
                 >
                     <span>Đăng xuất</span>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

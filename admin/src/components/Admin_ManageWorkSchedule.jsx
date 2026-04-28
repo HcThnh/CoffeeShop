@@ -68,8 +68,7 @@ const Admin_ManageWorkSchedule = () => {
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                     <div>
-                        <h2 className="text-4xl font-black text-stone-900 tracking-tight">Lịch Phân Công</h2>
-                        <p className="text-stone-500 mt-2 text-lg">Quản lý và theo dõi ca làm việc của nhân sự.</p>
+                        <h2 className="text-4xl font-black text-stone-900 mt-0 tracking-tight">Lịch Làm Việc</h2>
                     </div>
                     <button 
                         onClick={handleCreateWorkSchedule}
