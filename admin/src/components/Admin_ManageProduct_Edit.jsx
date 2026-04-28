@@ -25,7 +25,6 @@ const Admin_ManageProduct_Edit = () => {
             name: nameCreate,
             unit_price: priceCreate,
         }
-        console.log(prodCreate);
 
         try {
             const res = await axios.post(
@@ -63,7 +62,6 @@ const Admin_ManageProduct_Edit = () => {
             id: idMod,
         }
 
-        console.log(modify);
         try {
             const res = await axios.patch(
                 "https://coffeeshop-api-udqx.onrender.com/manager/update/product",

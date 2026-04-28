@@ -39,7 +39,6 @@ const Admin_ManageEmployee = () => {
                     }
                 )
                 setEmp(res.data);
-                console.log(res.data);
             }
             catch(err) {
                 setErr(err.message || "Something went wrong!")
