@@ -110,17 +110,6 @@ npm run start
 
 ---
 
-## ⚠️ Lưu ý quan trọng về API Endpoint (Kết nối Backend - Frontend)
-
-> [!WARNING]
-> Hiện tại, các URL gọi API trong cả hai giao diện Frontend (`admin` và `userfe`) đang được liên kết trực tiếp tới API Render trực tuyến:
-> `https://coffeeshop-api-udqx.onrender.com`
-> 
-> * **Để kết nối Frontend local với Backend chạy local (`http://localhost:8080`):** Bạn cần tìm kiếm các API Endpoint bắt đầu bằng `https://coffeeshop-api-udqx.onrender.com` trong thư mục `src` của cả hai thư mục `admin` và `userfe` và thay thế chúng thành `http://localhost:8080`.
-> * **Trường hợp muốn chạy Frontend local kết nối trực tiếp với Database/Backend production trực tuyến:** Bạn chỉ cần khởi động Frontend (`admin` và `userfe`) và chạy mà không cần khởi động backend local.
-
----
-
 ## Khởi động Backend bằng Docker (Optional)
 
 Dự án đã cấu hình sẵn [Dockerfile](file:///d:/Documents/BK4/CoffeeShop/Dockerfile) cho backend. Để chạy backend bằng Docker:
