@@ -14,7 +14,7 @@ public class employeeMapper {
         return employee;
     }
     public employeeResponseDto tEmployeeResponseDto(employee employee){
-        return new employeeResponseDto(employee.getId(),employee.getName(),employee.getPhoneNumber(),employee.getStartDate(),employee.getPosition(),employee.getTotalSalary());
+        return new employeeResponseDto(employee.getId(),employee.getName(),employee.getPhoneNumber(),employee.getStartDate(),employee.getPosition(),employee.getTotalSalary(),employee.getUnitSalary());
     }
     public employeeUpdateDto tEmployeeUpdateDto(employee employee){
         return new employeeUpdateDto(employee.getDob(),employee.getPhoneNumber(),employee.getAddress(),employee.getGender(),employee.getName());

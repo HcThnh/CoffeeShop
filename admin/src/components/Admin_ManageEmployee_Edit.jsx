@@ -1,9 +1,13 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Admin_Header from './Admin_Header'; 
 import "../assets/css/Admin_ManageEmployee_Edit.css"; 
 import axios from 'axios';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Admin_ManageEmployee_Edit = () => {
+    const navigate = useNavigate();
+
     const [updateMessage, setUpdateMessage] = useState(""); 
 
     // Thêm nhân viên mới
@@ -138,14 +142,9 @@ const Admin_ManageEmployee_Edit = () => {
             <Admin_Header />
 
             {/* Nội dung chính */}
-            <div className="work-schedule-edit-content">
-                {/* Vùng I - Thêm nhân viên mới */}
+            {/* <div className="work-schedule-edit-content">
                 <div className="add-employee-section">
                     <h2 className="add-employee-title">THÊM NHÂN VIÊN MỚI</h2>
-                    {/* <input type="text" placeholder="Mã nhân viên" className="input-field"
-                    ref={idRef} />
-                    <input type="text" placeholder="Họ và tên" className="input-field" 
-                    ref={nameRef}/> */}
                     <input type="text" placeholder="Số điện thoại" className="input-field" 
                     ref={phoneRef}/>
                     <input type="password" placeholder="Mật khẩu" className="input-field" 
@@ -156,13 +155,11 @@ const Admin_ManageEmployee_Edit = () => {
                     ref={salRef}/>
                     <button className="submit-button-custom" onClick={CreateEmp}>Thêm mới</button>
 
-                    {/* Thông báo thêm nhân viên */}
                     <div className="add-employee-message-custom">
                         {updateMessage}
                     </div>
                 </div>
 
-                {/* Vùng II - Thay đổi vị trí nhân viên */}
                 <div className="change-position-section">
                     <h2 className="change-position-title">THAY ĐỔI VỊ TRÍ NHÂN VIÊN</h2>
                     <input type="text" placeholder="Mã nhân viên" className="input-field"
@@ -173,25 +170,39 @@ const Admin_ManageEmployee_Edit = () => {
                     ref={newsalRef}/>
                     <button className="submit-button-custom" onClick={UpdateEmp}>Cập nhật</button>
 
-                    {/* Thông báo thay đổi vị trí */}
                     <div className="change-position-message-custom">
                         {updateMessage}
                     </div>
                 </div>
 
-                {/* Vùng III - Xóa nhân viên */}
                 <div className="delete-employee-section">
                     <h2 className="delete-employee-title">XÓA NHÂN VIÊN</h2>
                     <input type="text" placeholder="Mã nhân viên" className="input-field" 
                     ref={idDeleteRef}/>
                     <button className="submit-button-custom" onClick={DeleteEmp}>Xóa</button>
 
-                    {/* Thông báo xóa nhân viên */}
                     <div className="delete-employee-message-custom">
                         {updateMessage}
                     </div>
                 </div>
-            </div>
+            </div> */}
+
+            <main className="mx-auto px-4 py-8 sm:px-6 max-w-7xl font-sans">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                    <h2 className="text-4xl font-black text-stone-900 mt-0 tracking-tight">
+                        Chỉnh sửa thông tin nhân viên
+                    </h2>
+
+                    <button className="bg-stone-900 hover:bg-black text-white font-bold
+                    py-3 px-6 rounded-2xl shadow-xl shadow-stone-900/20 transition-transform
+                    transform hover:-translate-y-1 flex items-center gap-2"
+                    onClick={() => navigate('/admin/manage-employee')}>
+                        <span className=""><ArrowLeft/></span>Quay về
+                    </button>
+                </div>
+
+                
+            </main>
         </div>
     );
 };
