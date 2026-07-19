@@ -5,12 +5,13 @@ import "../assets/css/Admin_ManageEmployee.css";
 import axios from 'axios';
 import {
     Phone, User, Info, Search, UserPen, Loader2, Trash,
-    Check, X
+    Check, X, Plus
 } from 'lucide-react';
-
+import DeleteEmployeeModal from './Admin_DeleteEmployeeModal';
 
 const Admin_ManageEmployee = () => {
     const navigate = useNavigate();
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 
     const [updateMessage,] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -66,10 +67,6 @@ const Admin_ManageEmployee = () => {
         }
     }
 
-    const renderSalary = (selectedEmp) => {
-        return selectedEmp.totalSalary !== undefined ? formatSalary(selectedEmp.totalSalary) : "Chưa cập nhật";
-    }
-
     const handleEditButton = async (id) => {
         if (!selectedEmp) return;
 
@@ -100,6 +97,33 @@ const Admin_ManageEmployee = () => {
         }
         catch (err) {
             setErr(err.message);
+        }
+    }
+
+    const handleDeleteEmployee = async () => {
+        if (!selectedEmp) return;
+        const token = localStorage.getItem("token");
+
+        const idDelete = selectedEmp.id;
+
+        try {
+            await axios.delete(
+                "https://coffeeshop-api-udqx.onrender.com/manager/delete/employee",
+                {
+                    params: {id: idDelete},
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            )
+
+            setIsOpenDeleteModal(false);
+            setSelectedEmp(null);
+            await GetEmployee();
+        }
+        catch(err) {
+            setErr(err);
         }
     }
 
@@ -171,7 +195,7 @@ const Admin_ManageEmployee = () => {
                     py-3 px-6 rounded-2xl shadow-xl shadow-stone-900/20 transition-transform
                     transform hover:-translate-y-1 flex items-center gap-2"
                         onClick={() => navigate('/admin/manage-employee/edit')}>
-                        <span><UserPen /></span>Quản lý thông tin nhân viên
+                        <span><Plus/></span>Thêm nhân viên
                     </button>
                 </div>
 
@@ -192,11 +216,6 @@ const Admin_ManageEmployee = () => {
                                 ${selectedEmp?.id === employee.id ? 'border-amber-500 border-l-amber-500' : ''}`}
                                         key={idx}>
                                         <div className="font-sans">
-                                            <p className="flex items-center gap-2">
-                                                <span>
-                                                    <User className='size-4' />
-                                                </span>
-                                                {employee.name}</p>
                                             <p className="flex items-center gap-2">
                                                 <span>
                                                     <Phone className='size-4' /></span>
@@ -295,7 +314,7 @@ const Admin_ManageEmployee = () => {
                                             <div className="flex-1">
                                                 <p className="text-xs text-stone-400 font-semibold uppercase tracking-wider m-0">Lương cơ bản</p>
                                                 {toggleEdit ? (
-                                                    <input 
+                                                    <input
                                                         className="w-full max-w-xs text-xl font-bold text-amber-950 bg-white/70 backdrop-blur-sm
                                                     px-3 py-1 rounded-xl border border-amber-200/60 shadow-inner
                                                     placeholder:text-amber-700/40 placeholder:font-normal placeholder:text-sm
@@ -311,20 +330,6 @@ const Admin_ManageEmployee = () => {
                                                         {selectedEmp.unitSalary !== undefined ? `${formatSalary(selectedEmp.unitSalary)} / giờ` : "Chưa thiết lập"}
                                                     </p>
                                                 )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="mt-6 p-5 rounded-2xl bg-gradient-to-br from-amber-50/60 to-orange-50/60 border border-amber-100/40 flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="p-3 bg-gradient-to-tr from-amber-500 to-amber-600 text-white rounded-xl shadow-md shadow-amber-500/20">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-amber-800 font-bold uppercase tracking-wider m-0">Tổng lương nhận</p>
-                                                <p className="text-2xl font-black text-amber-900 m-0 mt-0.5">
-                                                    {renderSalary(selectedEmp)}
-                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -353,7 +358,9 @@ const Admin_ManageEmployee = () => {
                                             </div>}
                                         <button className="flex items-center">
                                             <span className="p-2 rounded-full bg-amber-500/10 hover:bg-red-200
-                                            transition all duration-200 hover:text-red-400"><Trash /></span>
+                                            transition all duration-200 hover:text-red-400"
+                                            onClick={() => setIsOpenDeleteModal(true)}>
+                                                <Trash /></span>
                                         </button>
                                     </div>
                                 </div>
@@ -367,7 +374,11 @@ const Admin_ManageEmployee = () => {
                 </div>
             </main>
 
-
+            <DeleteEmployeeModal
+                isOpen={isOpenDeleteModal}
+                onClose={() => setIsOpenDeleteModal(false)}
+                onConfirm={handleDeleteEmployee}
+            />
 
             {updateMessage && (
                 <div className="success-message">{updateMessage}</div>

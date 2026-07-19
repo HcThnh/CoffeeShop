@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Admin_Header from './Admin_Header'; 
 import axios from 'axios';
@@ -20,17 +20,41 @@ const Admin_ManageWorkSchedule_Edit = () => {
     const [shiftSuccess, setShiftSuccess] = useState('');
     const [scheduleErr, setScheduleErr] = useState("");
     const [shiftErr, setShiftErr] = useState("");
+    const [emp, setEmp] = useState([]);
+    const [selectedEmpId, setSelectedEmpId] = useState("");
     
     const [isSubmittingSchedule, setIsSubmittingSchedule] = useState(false);
     const [isSubmittingShift, setIsSubmittingShift] = useState(false);
 
     const dateRef = useRef("");
-    const idERef = useRef("");
     const shiftRef = useRef("");
     const startTimeRef = useRef("");
     const endTimeRef = useRef("");
 
-    // Tạo lịch làm việc
+    const getAllEmp = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await axios.get(
+                "https://coffeeshop-api-udqx.onrender.com/manager/view/employees",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            )
+
+            setEmp(res.data);
+        } catch (err) {
+            setScheduleErr(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi tạo phân công!");
+        }
+    }
+
+    useEffect(() => {
+        getAllEmp();
+    }, []);
+
     const CreateSchedule = async(e) => {
         e.preventDefault();
         setScheduleErr("");
@@ -38,22 +62,22 @@ const Admin_ManageWorkSchedule_Edit = () => {
         setIsSubmittingSchedule(true);
 
         const date = dateRef.current.value;
-        const idE = idERef.current.value;
         const shift = shiftRef.current.value;
 
-        if (!date || !idE || !shift) {
+        if (!date || !selectedEmpId || !shift) {
             setScheduleErr("Vui lòng điền đầy đủ thông tin phân công.");
             setIsSubmittingSchedule(false);
             return;
         }
 
+        const token = localStorage.getItem("token");
+        
         const schedule = {
             date: date,
-            employeeId: idE,
+            employeeId: selectedEmpId,
             shiftId: shift,
         }
 
-        const token = localStorage.getItem("token");
         try {
             await axios.post(
                 "https://coffeeshop-api-udqx.onrender.com/manager/create/schedule",
@@ -202,21 +226,27 @@ const Admin_ManageWorkSchedule_Edit = () => {
                                     />
                                 </label>
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold text-stone-700 mb-2">
-                                    Mã Nhân viên
-                                    <input
-                                        type="text"
-                                        placeholder="Ví dụ: NV001"
-                                        className="w-full px-4 py-3 rounded-xl mt-2
-                                        border border-stone-200 focus:border-emerald-500 
-                                        focus:ring-2 focus:ring-emerald-200 outline-none transition-all font-medium text-stone-700 bg-stone-50 focus:bg-white uppercase"
-                                        value={workSchedule.employeeId}
-                                        onChange={(e) => setWorkSchedule({ ...workSchedule, employeeId: e.target.value })}
-                                        required
-                                        ref={idERef}
-                                    />
+                            <div className="flex flex-col text-sm font-bold text-stone-700 mb-2
+                            border border-stone-200 rounded-md px-4 py-3">
+                                <label className="w-full mt-2"
+                                htmlFor='employeeSelect'>
+                                    Chọn nhân viên
                                 </label>
+                                <select name="employeeSelect" id="employeeSelect"
+                                    className="w-full py-3 rounded-xl border border-stone-200 focus:border-emerald-500
+                                    focus:ring-2 focus:ring-emerald-200 outline-none transition-all font-medium
+                                    text-stone-700 bg-stone-50 focus:bg-white mt-2 px-4"
+                                    value={selectedEmpId}
+                                    onChange={(e) => setSelectedEmpId(Number(e.target.value))}>
+                                        <option value="" disabled>Nhấn để chọn số điện thoại</option>
+                                        {emp.map((item) => {
+                                            return (
+                                                <option key={item.id} value={item.id}>
+                                                    {item.phoneNumber}
+                                                </option>
+                                            )
+                                        })}
+                                    </select>
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-stone-700 mb-2">

@@ -37,9 +37,23 @@ public class employeeService {
     }
     @Transactional
     public void delEmployee(int id){
-        JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
-        manager.deleteUser(repo.findById(id).orElse(null).getPhoneNumber());
-        repo.deleteById(id);
+        var empOpt = repo.findById(id);
+        if (empOpt.isEmpty()) {
+            return;
+        }
+        var emp = empOpt.get();
+        if (emp.get_orders() != null) {
+            for (var order : emp.get_orders()) {
+                order.setEmployee(null);
+            }
+        }
+        if (emp.getPhoneNumber() != null) {
+            JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
+            if (manager.userExists(emp.getPhoneNumber())) {
+                manager.deleteUser(emp.getPhoneNumber());
+            }
+        }
+        repo.delete(emp);
     }
     public void updateEmployee(employeeUpdateDto dto){
         repo.updateEmployeeInfo(dto.dob(),dto.address(),dto.gender(),dto.name(),dto.phoneNumber());

@@ -35,6 +35,7 @@ import com.example.database.Service.productService;
 import com.example.database.Service.scheduleService;
 import com.example.database.Service.shiftService;
 import com.example.database.Shift.shiftDto;
+import com.example.database.Shift.shiftResponseDto;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,6 +85,10 @@ public class managerController {
     @PostMapping("/create/shift")
     public void createShift(@RequestBody shiftDto dto) {
         shiftService.createShift(dto);
+    }
+    @GetMapping("/view/shifts")
+    public List<shiftResponseDto> getAllShifts() {
+        return shiftService.getAllShifts();
     }
     @PostMapping("/create/product")
     public void createProduct(@RequestBody productDto dto) {
