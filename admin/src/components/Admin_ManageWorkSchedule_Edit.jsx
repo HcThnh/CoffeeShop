@@ -21,7 +21,9 @@ const Admin_ManageWorkSchedule_Edit = () => {
     const [scheduleErr, setScheduleErr] = useState("");
     const [shiftErr, setShiftErr] = useState("");
     const [emp, setEmp] = useState([]);
+    const [shifts, setShifts] = useState([]);
     const [selectedEmpId, setSelectedEmpId] = useState("");
+    const [selectedShiftId, setSelectedShiftId] = useState("");
     
     const [isSubmittingSchedule, setIsSubmittingSchedule] = useState(false);
     const [isSubmittingShift, setIsSubmittingShift] = useState(false);
@@ -51,8 +53,29 @@ const Admin_ManageWorkSchedule_Edit = () => {
         }
     }
 
+    const getAllShifts = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const res = await axios.get(
+                "https://coffeeshop-api-udqx.onrender.com/manager/view/shifts",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    }
+                }
+            )
+
+            setShifts(res.data);
+        } catch(err) {
+            setScheduleErr(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi tạo phân công!");
+        }
+    }
+
     useEffect(() => {
         getAllEmp();
+        getAllShifts();
     }, []);
 
     const CreateSchedule = async(e) => {
@@ -62,9 +85,8 @@ const Admin_ManageWorkSchedule_Edit = () => {
         setIsSubmittingSchedule(true);
 
         const date = dateRef.current.value;
-        const shift = shiftRef.current.value;
 
-        if (!date || !selectedEmpId || !shift) {
+        if (!date || !selectedEmpId || !selectedShiftId) {
             setScheduleErr("Vui lòng điền đầy đủ thông tin phân công.");
             setIsSubmittingSchedule(false);
             return;
@@ -75,7 +97,7 @@ const Admin_ManageWorkSchedule_Edit = () => {
         const schedule = {
             date: date,
             employeeId: selectedEmpId,
-            shiftId: shift,
+            shiftId: selectedShiftId,
         }
 
         try {
@@ -91,8 +113,9 @@ const Admin_ManageWorkSchedule_Edit = () => {
             setScheduleSuccess('Đã tạo phân công làm việc thành công!');
             setTimeout(() => setScheduleSuccess(''), 4000);
             
-            // Xóa form
-            setWorkSchedule({ date: '', employeeId: '', shift: '' });
+            setSelectedEmpId("");
+            setSelectedShiftId("");
+            if (dateRef.current) dateRef.current.value = "";
         }
         catch(err) {
             setScheduleErr(err.response?.data?.message || err.message || "Đã xảy ra lỗi khi tạo phân công!");
@@ -248,21 +271,26 @@ const Admin_ManageWorkSchedule_Edit = () => {
                                         })}
                                     </select>
                             </div>
-                            <div>
-                                <label className="block text-sm font-bold text-stone-700 mb-2">
-                                    Mã Ca làm (Shift ID)
-                                    <input
-                                        type="text"
-                                        placeholder="Ví dụ: 1, 2, S1"
-                                        className="w-full px-4 py-3 rounded-xl border border-stone-200 mt-2
-                                        focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 
-                                        outline-none transition-all font-medium text-stone-700 bg-stone-50 focus:bg-white uppercase"
-                                        value={workSchedule.shift}
-                                        onChange={(e) => setWorkSchedule({ ...workSchedule, shift: e.target.value })}
-                                        required
-                                        ref={shiftRef}
-                                    />
+                            <div className="flex flex-col text-sm font-bold text-stone-700 mb-2
+                            border border-stone-200 rounded-md px-4 py-3">
+                                <label className="w-full mt-2"
+                                htmlFor='shifts'>
+                                    Ca làm việc
                                 </label>
+                                <select name="shifts" id="shifts"
+                                className="w-full py-3 rounded-xl border border-stone-200 focus:border-emerald-500
+                                focus:ring-2 focus:ring-emerald-200 outline-none transition-all font-medium
+                                text-stone-700 bg-stone-50 focus:bg-white mt-2 px-4"
+                                value={selectedShiftId}
+                                onChange={(e) => setSelectedShiftId(Number(e.target.value))}>
+                                    <option value="" disabled>--- Chọn ca làm việc ---</option>
+                                    {shifts.map(item => {
+                                        return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.startTime} - {item.endTime}
+                                        </option>)
+                                    })}
+                                </select>
                             </div>
                             <button 
                                 type="submit" 

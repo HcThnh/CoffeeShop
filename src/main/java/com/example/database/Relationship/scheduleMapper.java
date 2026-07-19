@@ -18,8 +18,16 @@ public class scheduleMapper {
     public schedule tSchedule(scheduleDto dto){
         var schedule = new schedule();
         schedule.getId().setDate(dto.date());
-        employeeRepo.findById(dto.employeeId()).orElse(null).addSchedule(schedule);
-        shiftRepo.findById(dto.shiftId()).orElse(null).addSchedule(schedule);
+        schedule.getId().setEmployeeId(dto.employeeId());
+        schedule.getId().setShiftId(dto.shiftId());
+        
+        var emp = employeeRepo.findById(dto.employeeId())
+            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhân viên với ID: " + dto.employeeId()));
+        var sh = shiftRepo.findById(dto.shiftId())
+            .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ca làm việc với ID: " + dto.shiftId()));
+
+        emp.addSchedule(schedule);
+        sh.addSchedule(schedule);
         return schedule;
     }
     public scheduleResponseDto tScheduleResponseDto(schedule schedule){
