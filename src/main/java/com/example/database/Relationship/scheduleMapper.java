@@ -26,8 +26,8 @@ public class scheduleMapper {
         var sh = shiftRepo.findById(dto.shiftId())
             .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy ca làm việc với ID: " + dto.shiftId()));
 
-        emp.addSchedule(schedule);
-        sh.addSchedule(schedule);
+        schedule.setEmployee(emp);
+        schedule.setShift(sh);
         return schedule;
     }
     public scheduleResponseDto tScheduleResponseDto(schedule schedule){

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.database.Embedded.schedule_embed;
 import com.example.database.Relationship.scheduleDto;
@@ -18,6 +19,7 @@ public class scheduleService {
     private scheduleRepo repo;
     @Autowired 
     private scheduleMapper scheduleMapper;
+    @Transactional
     public void createSchedule(scheduleDto dto){
         repo.save(scheduleMapper.tSchedule(dto));
     }
@@ -26,6 +28,7 @@ public class scheduleService {
         .map(scheduleMapper::tScheduleResponseDto)
         .collect(Collectors.toList());
     }
+    @Transactional
     public void delSchedule(schedule_embed id){
         repo.deleteById(id);
     }
