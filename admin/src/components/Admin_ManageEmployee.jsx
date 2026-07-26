@@ -59,6 +59,7 @@ const Admin_ManageEmployee = () => {
     };
 
     const handleDetailEmployee = (id) => {
+        setToggleEdit(false);
         for (let i = 0; i < emp.length; i++) {
             if (emp[i].id === id) {
                 setSelectedEmp(emp[i]);
