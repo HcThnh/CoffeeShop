@@ -317,15 +317,6 @@ function UserInfo() {
                 <HeaderHomePage />
                 
                 <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mb-12">
-                    <div className="text-center mb-10">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-stone-800 tracking-tight">
-                            Hồ Sơ <span className="text-amber-600">Cá Nhân</span>
-                        </h2>
-                        <p className="mt-3 text-lg text-stone-500">
-                            Quản lý thông tin cá nhân và xem lại lịch sử các đơn hàng của bạn.
-                        </p>
-                    </div>
-
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                         <div className="lg:col-span-5 h-full">
                             <UserPersonalInfo toggle={HandleOrder} userInfo={userInfo} fetchError={error} />
