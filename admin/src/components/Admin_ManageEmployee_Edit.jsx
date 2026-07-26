@@ -68,6 +68,11 @@ const Admin_ManageEmployee_Edit = () => {
                     }
                 }
             )
+
+            setPhoneEmp("");
+            setPassEmp("");
+            setPosEmp("");
+            setSalEmp("");
         }
         catch(err) {
             setErr(err.message);
@@ -76,54 +81,7 @@ const Admin_ManageEmployee_Edit = () => {
 
     return (
         <div>
-            {/* Header */}
             <Admin_Header />
-
-            {/* Nội dung chính */}
-            {/* <div className="work-schedule-edit-content">
-                <div className="add-employee-section">
-                    <h2 className="add-employee-title">THÊM NHÂN VIÊN MỚI</h2>
-                    <input type="text" placeholder="Số điện thoại" className="input-field" 
-                    ref={phoneRef}/>
-                    <input type="password" placeholder="Mật khẩu" className="input-field" 
-                    ref={passRef}/>
-                    <input type="text" placeholder="Vị trí" className="input-field" 
-                    ref={posRef}/>
-                    <input type="number" placeholder="Lương" className="input-field" 
-                    ref={salRef}/>
-                    <button className="submit-button-custom" onClick={CreateEmp}>Thêm mới</button>
-
-                    <div className="add-employee-message-custom">
-                        {updateMessage}
-                    </div>
-                </div>
-
-                <div className="change-position-section">
-                    <h2 className="change-position-title">THAY ĐỔI VỊ TRÍ NHÂN VIÊN</h2>
-                    <input type="text" placeholder="Mã nhân viên" className="input-field"
-                    ref={idChangeRef} />
-                    <input type="text" placeholder="Vị trí mới" className="input-field" 
-                    ref={newposRef}/>
-                    <input type="text" placeholder="Lương mới" className="input-field" 
-                    ref={newsalRef}/>
-                    <button className="submit-button-custom" onClick={UpdateEmp}>Cập nhật</button>
-
-                    <div className="change-position-message-custom">
-                        {updateMessage}
-                    </div>
-                </div>
-
-                <div className="delete-employee-section">
-                    <h2 className="delete-employee-title">XÓA NHÂN VIÊN</h2>
-                    <input type="text" placeholder="Mã nhân viên" className="input-field" 
-                    ref={idDeleteRef}/>
-                    <button className="submit-button-custom" onClick={DeleteEmp}>Xóa</button>
-
-                    <div className="delete-employee-message-custom">
-                        {updateMessage}
-                    </div>
-                </div>
-            </div> */}
 
             <main className="mx-auto px-4 py-8 sm:px-6 max-w-7xl font-sans">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">

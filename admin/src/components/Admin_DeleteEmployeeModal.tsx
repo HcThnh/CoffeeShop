@@ -27,7 +27,7 @@ const DeleteEmployeeModal = ({ isOpen, onClose, onConfirm }: DeleteEmployeeModal
                         <button className="">
                             <span className="flex items-center gap-2 font-sans rounded-lg
                             bg-emerald-300 px-2 py-1 text-black font-semibold
-                            hover:bg-emerald-500 hover:text-gray-300 transition-all
+                            hover:bg-emerald-500 transition-all
                             duration-200 cursor-pointer"
                             onClick={() => onConfirm()}>
                                 <Check/> Xác nhận</span>
