@@ -1,58 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Admin_Header from './Admin_Header'; 
 import "../assets/css/Admin_Revenue.css"; 
 import axios from 'axios';
+import { LoaderCircle, CircleX } from 'lucide-react';
 
 const Admin_Revenue = () => {
-    const [filters, setFilters] = useState({
-        productId: '',
-        productName: '',
-        price: '',
-        quantity: '',
-        total: ''
-    });
-    const [revenueData, setRevenueData] = useState([
-        { id: "0001", name: "Trà sen vàng", price: 45000, quantity: 250, total: 11250000 },
-        { id: "0002", name: "Phindi Choco", price: 50000, quantity: 200, total: 10000000 },
-        { id: "0003", name: "Phindi Cafe", price: 47000, quantity: 300, total: 14100000 },
-    ]);
-    const [totalRevenue, setTotalRevenue] = useState(0);
-
-    // Tính tổng doanh thu
-    useEffect(() => {
-        const total = revenueData.reduce((sum, item) => sum + item.total, 0);
-        setTotalRevenue(total);
-    }, [revenueData]);
-
-    // Sắp xếp theo các tiêu chí
-    const handleSort = (column, type = 'string') => {
-        const sortedData = [...revenueData];
-        sortedData.sort((a, b) => {
-            if (type === 'string') {
-                return a[column].localeCompare(b[column]);
-            }
-            return a[column] - b[column];
-        });
-
-        setRevenueData(sortedData);
-    };
-
-    // Lọc và sắp xếp dữ liệu
-    const filteredData = revenueData.filter((item) => {
-        return (
-            (!filters.productId || item.id.toString().includes(filters.productId)) &&
-            (!filters.productName || item.name.toLowerCase().includes(filters.productName)) &&
-            (!filters.price || item.price.toString().includes(filters.price)) &&
-            (!filters.quantity || item.quantity.toString().includes(filters.quantity)) &&
-            (!filters.total || item.total.toString().includes(filters.total))
-        );
-    });
-
     const dateRef = useRef("");
     const [err, setErr] = useState("");
-    const [income, setIncome] = useState(""); 
+    const [income, setIncome] = useState("");
+    const [month, setMonth] = useState("");
 
-    const CalIncome = async (e) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const CalIncome = async () => {
         const token = localStorage.getItem("token");
 
         if (!dateRef || !dateRef.current || !dateRef.current.value) {
@@ -61,77 +21,82 @@ const Admin_Revenue = () => {
         }
     
         const dateValue = dateRef.current.value;
-        const [year, month] = dateValue.split("-").map(Number); 
+        const [year, month] = dateValue.split("-").map(Number);
+        setMonth(month);
+        setIsLoading(true);
 
         try {
             const res = await axios.get(
                 "https://coffeeshop-api-udqx.onrender.com/manager/income",
                 {
-                    params: { year, month }, // Truyền params đúng cách
+                    params: { year, month },
                     headers: {
-                        Authorization: `Bearer ${token}`, // Sửa đúng header
+                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                 }
             );
-            setIncome(res.data); // Lưu kết quả vào state
-        } catch (err) {
-            setErr(err.message); // Xử lý lỗi
+            setIncome(res.data);
+        } catch (error) {
+            setErr(error.message);
+            console.error(err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div>
-            {/* Header */}
+        <div className="min-h-screen bg-stone-100 font-sans">
             <Admin_Header />
 
-            {/* Nội dung chính */}
-            <h2 className="revenue-title">BÁO CÁO DOANH THU HÀNG THÁNG</h2>
-
-            {/* Tổng Doanh thu */}
-            <div className="revenue-summary">
-                <div className="left-summary">
-                    <input
-                        type="month"
-                        className="revenue-input"
-                        placeholder="Chọn tháng và năm"
-                        ref={dateRef}
-                    />
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div className="flex mb-10">
+                    <h1 className="text-4xl font-black text-stone-900 mt-0 tracking-tight">
+                        Báo cáo doanh thu</h1>
                 </div>
-                <div className="right-summary">
-                    
-                    <strong className="total-revenue">{income} VNĐ</strong>
-                </div>
-            </div>
-            <button className="income-button" onClick={CalIncome}>
-                Tính lợi nhuận
-            </button>
 
-            {/* Bảng doanh thu */}
-            {/* <div className="revenue-table-container">
-                <table id="revenue-table">
-                    <thead>
-                        <tr>
-                            <th onClick={() => handleSort('id', 'number')}>ID sản phẩm</th>
-                            <th onClick={() => handleSort('name', 'string')}>Tên sản phẩm</th>
-                            <th onClick={() => handleSort('price', 'number')}>Đơn giá</th>
-                            <th onClick={() => handleSort('quantity', 'number')}>Số lượng</th>
-                            <th onClick={() => handleSort('total', 'number')}>Tổng</th>
-                        </tr>
-                    </thead>
-                    <tbody id="revenue-data">
-                        {filteredData.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.price.toLocaleString('vi-VN')} đ</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.total.toLocaleString('vi-VN')} đ</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div> */}
+                <div className="flex justify-between">
+                    <div className="flex flex-col gap-4 flex-1 max-w-xs">
+                        <input 
+                            type="month"
+                            className="w-full px-3 py-2 text-sm text-gray-800 bg-white
+                            border border-gray-300 rounded-lg shadow-sm
+                            hover:border-gray-400
+                            focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20
+                            cursor-pointer transition-all duration-200
+                            [&::-webkit-calendar-picker-indicator]:cursor-pointer 
+                            [&::-webkit-calendar-picker-indicator]:opacity-60 
+                            hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
+                            placeholder="Chọn tháng và năm"
+                            ref={dateRef}
+                            id="date"
+                        />
+
+                        <button className="bg-emerald-300 rounded-lg py-2 font-semibold
+                        cursor-pointer hover:bg-emerald-400 transition-all duration-200"
+                        onClick={CalIncome}>
+                            Tính lợi nhuận
+                        </button>
+
+                        {isLoading ? (
+                            <div className="flex justify-center py-3">
+                                <LoaderCircle className="w-8 h-8 animate-spin text-amber-400"
+                                strokeWidth={3.5}/>
+                            </div>
+                        ) : err ? (
+                            <div className="flex flex-col items-center bg-red-300 border-2
+                            border-red-400 rounded-lg py-3">
+                                <CircleX className="w-8 h-8 font-semibold text-red-600"/>
+                                <p className="font-semibold">Đã xảy ra lỗi, vui lòng thử lại.</p>
+                            </div>
+                        ) : ( month &&
+                            <div className="flex items-center font-semibold">
+                                Lợi nhuận tháng {month} là {income} VNĐ.
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </main>
         </div>
     );
 };

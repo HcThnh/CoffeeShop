@@ -1,6 +1,5 @@
 import './App.css';
 import UserGiftExchange from './component/UserGiftExchange';
-import HeaderHomePage from './component/UserHeaderHP';
 import UserInfo from './component/UserInfo';
 import UserProduct from './component/UserProduct';
 import UserRegist from './component/UserRegist';
@@ -20,7 +19,6 @@ function ProtectedRoute({ children }) {
 function CustomerRoutes() {
   return (
     <>
-      <HeaderHomePage />
       <Routes>
         <Route path='/product' element={<UserProduct />} />
         <Route path='/exchange' element={<UserGiftExchange />} />

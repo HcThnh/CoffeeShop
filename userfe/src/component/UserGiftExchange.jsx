@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import UserGiftHistory from './UserGiftHistory';
+import HeaderHomePage from './UserHeaderHP';
+import { Tag } from 'lucide-react';
+import FooterPage from './UserFooter';
 
 function UserGiftExchange() {
     const [err, setErr] = useState("");
@@ -18,6 +21,7 @@ function UserGiftExchange() {
                 { headers: { "Content-Type": "application/json" } }
             );
             setGift(res.data);
+            console.log(res.data);
 
             const token = localStorage.getItem("token");
             const pointRes = await axios.get(
@@ -100,135 +104,135 @@ function UserGiftExchange() {
     };
 
     return (
-        <div className="bg-stone-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            <div className="max-w-5xl mx-auto">
-                <div className="text-center mb-10 mt-16">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-stone-800 tracking-tight">
-                        Chương Trình <span className="text-amber-600">Khách Hàng Thân Thiết</span>
-                    </h2>
-                    <p className="mt-3 text-lg text-stone-500">
-                        Tích lũy điểm thưởng và đổi lấy những phần quà hấp dẫn từ Coffee Shop.
-                    </p>
-                </div>
+        <div className="min-h-screen bg-stone-50 font-sans">
+            <HeaderHomePage/>
 
-                <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Left Panel: Points Info */}
-                    <div className="lg:w-1/3 space-y-6">
-                        <div className="bg-white rounded-3xl shadow-xl shadow-stone-200/50 p-8 border border-stone-100 relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
-                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-amber-100 rounded-full mix-blend-multiply opacity-50 transition-transform group-hover:scale-110"></div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-6 mb-12">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_3fr] gap-8">
+                    
+                    {/* Left Column: Point Info & Actions */}
+                    <div className="flex flex-col gap-6">
+                        {/* Point Card */}
+                        <div className="flex items-center p-5 border border-stone-200 bg-white
+                        rounded-2xl gap-4 justify-between shadow-sm relative overflow-hidden group">
+                            <div className="absolute -right-6 -top-6 w-20 h-20 bg-amber-100/40 rounded-full mix-blend-multiply opacity-70 transition-transform group-hover:scale-110"></div>
                             
-                            <h3 className="text-lg font-bold text-stone-600 mb-2 relative z-10">Điểm hiện tại của bạn</h3>
-                            <div className="flex items-center space-x-3 mb-6 relative z-10">
-                                <div className="bg-amber-100 text-amber-600 p-3 rounded-2xl">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 24 24" fill="currentColor">
-                                      <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clipRule="evenodd" />
-                                    </svg>
+                            <div className="flex items-center gap-3 relative z-5">
+                                <img src="/Avatar.png" alt="avatar" className="w-10 h-10 rounded-full border border-stone-100 object-cover" />
+                                <div>
+                                    <p className="text-xs text-stone-500">Tài khoản</p>
+                                    <p className="font-semibold text-stone-850 text-sm">Điểm tích lũy</p>
                                 </div>
-                                <span className="text-5xl font-black text-stone-800 tracking-tight">{point}</span>
                             </div>
                             
-                            <button 
-                                onClick={HandleGiftHistory}
-                                className="w-full flex items-center justify-center space-x-2 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold py-3 px-4 rounded-xl transition-colors relative z-10"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span>Lịch sử đổi quà</span>
-                            </button>
+                            <div className="flex items-center gap-1.5 bg-amber-100 text-amber-700 py-1.5 px-3.5 rounded-xl font-bold relative z-10">
+                                <span className="text-lg">{point}</span>
+                                <span className="text-xs uppercase">Điểm</span>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col border border-stone-200 rounded-2xl p-5 gap-5 bg-white shadow-sm">
+                            <div>
+                                <h3 className="text-base font-bold text-stone-800 mb-3 pb-2 border-b border-stone-100">Đổi quà tặng</h3>
+                                {selectedId ? (
+                                    (() => {
+                                        const selectedGift = gift.find(g => g.id === selectedId);
+                                        if (!selectedGift) return null;
+                                        return (
+                                            <div className="p-4 bg-amber-50/50 border border-amber-200/50 rounded-xl">
+                                                <p className="font-bold text-amber-900 text-sm">{selectedGift.name}</p>
+                                                <div className="flex justify-between items-center mt-2 pt-2 border-t border-amber-200/30">
+                                                    <span className="text-xs text-stone-500">Yêu cầu điểm:</span>
+                                                    <span className="text-sm text-amber-700 font-extrabold">{selectedGift.point} điểm</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })()
+                                ) : (
+                                    <div className="py-6 text-center border-2 border-dashed border-stone-200 rounded-xl">
+                                        <p className="text-xs text-stone-400 italic">Vui lòng chọn quà từ danh sách</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="flex flex-col gap-3">
+                                {err && (
+                                    <div className="text-red-600 text-xs text-center font-medium bg-red-50 py-2 px-3 rounded-lg border border-red-100">
+                                        {err}
+                                    </div>
+                                )}
+                                {successMsg && (
+                                    <div className="text-green-600 text-xs text-center font-medium bg-green-50 py-2 px-3 rounded-lg border border-green-100">
+                                        {successMsg}
+                                    </div>
+                                )}
+                                <button
+                                    onClick={SendGift}
+                                    disabled={isLoading || !selectedId}
+                                    className="w-full py-3 rounded-xl bg-amber-600 text-white hover:bg-amber-700 text-sm font-bold shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5 active:translate-y-0 disabled:transform-none"
+                                >
+                                    {isLoading ? "Đang xử lý..." : "Xác nhận đổi quà"}
+                                </button>
+                                <button
+                                    onClick={HandleGiftHistory}
+                                    className="w-full py-3 rounded-xl border border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-850 text-sm font-semibold transition-all"
+                                >
+                                    Lịch sử đổi quà
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right Panel: Gift Options */}
-                    <div className="lg:w-2/3 bg-white rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-100 p-8">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-2xl font-bold text-stone-800">Danh sách quà tặng</h3>
+                    <div className="flex flex-col py-2 max-h-[80vh]">
+                        <h2 className="text-2xl font-black text-stone-800 pb-3 border-b-2 border-stone-200/80 mb-6 flex justify-between items-center">
+                            <span>Bộ sưu tập quà tặng</span>
                             <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">
                                 {gift.length} lựa chọn
                             </span>
-                        </div>
+                        </h2>
 
-                        {err && <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium mb-6 border border-red-100 flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                            {err}
-                        </div>}
-                        
-                        {successMsg && <div className="bg-green-50 text-green-600 p-4 rounded-xl text-sm font-medium mb-6 border border-green-100 flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            {successMsg}
-                        </div>}
-
-                        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 pb-4 scrollbar-thin scrollbar-thumb-stone-200">
-                            {gift.map((item) => (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto pr-2 pb-6 scrollbar-thin">
+                            {gift.map(item => (
                                 <div 
                                     key={item.id}
                                     onClick={() => setSelectedId(item.id)}
-                                    className={`relative flex items-center p-5 rounded-2xl border-2 transition-all cursor-pointer ${
+                                    className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
                                         selectedId === item.id 
-                                            ? 'border-amber-500 bg-amber-50/50 shadow-md' 
-                                            : 'border-stone-100 bg-white hover:border-amber-200 hover:bg-stone-50'
+                                            ? 'border-amber-500 bg-amber-50/40 shadow-sm' 
+                                            : 'border-stone-150 bg-white hover:border-amber-250 hover:bg-stone-50/50 hover:shadow-sm'
                                     }`}
                                 >
-                                    {/* Selection Indicator */}
-                                    <div className={`shrink-0 w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center ${
-                                        selectedId === item.id ? 'border-amber-500 bg-amber-500' : 'border-stone-300 bg-white'
-                                    }`}>
-                                        {selectedId === item.id && (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                            </svg>
-                                        )}
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl transition-colors duration-200 ${
+                                            selectedId === item.id ? 'bg-amber-100 text-amber-600' : 'bg-stone-100 text-stone-500'
+                                        }`}>
+                                            <Tag size={20} className={selectedId === item.id ? 'stroke-[2.5px]' : ''} />
+                                        </div>
+                                        <div>
+                                            <h4 className={`text-base font-bold transition-colors ${selectedId === item.id ? 'text-amber-900' : 'text-stone-800'}`}>
+                                                {item.name}
+                                            </h4>
+                                            <p className="text-xs text-stone-500 mt-0.5">Món quà từ Coffee Shop</p>
+                                        </div>
                                     </div>
-
-                                    <div className="flex-1">
-                                        <h4 className={`text-lg font-bold ${selectedId === item.id ? 'text-amber-900' : 'text-stone-800'}`}>
-                                            {item.name}
-                                        </h4>
-                                    </div>
-
-                                    <div className="shrink-0 flex items-center space-x-1.5 bg-white border border-stone-200 px-3 py-1.5 rounded-lg">
-                                        <span className="font-extrabold text-amber-600">{item.point}</span>
-                                        <span className="text-xs font-bold text-stone-500 uppercase">Điểm</span>
+                                    <div className="shrink-0 flex items-center gap-1 bg-amber-50 border border-amber-200/50 px-3 py-1.5 rounded-xl">
+                                        <span className="font-extrabold text-amber-600 text-sm">{item.point}</span>
+                                        <span className="text-[10px] font-bold text-stone-500 uppercase">Điểm</span>
                                     </div>
                                 </div>
                             ))}
                             
                             {gift.length === 0 && (
-                                <div className="text-center py-10">
-                                    <p className="text-stone-500">Đang tải danh sách quà tặng...</p>
+                                <div className="col-span-full text-center py-16 bg-white border border-stone-200 rounded-3xl">
+                                    <p className="text-stone-400 italic">Đang tải danh sách quà tặng...</p>
                                 </div>
                             )}
-                        </div>
-
-                        <div className="mt-8 pt-6 border-t border-stone-100">
-                            <button 
-                                onClick={SendGift}
-                                disabled={isLoading || !selectedId}
-                                className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition-all transform flex items-center justify-center space-x-2
-                                    ${(!selectedId || isLoading) 
-                                        ? 'bg-stone-200 text-stone-400 cursor-not-allowed shadow-none' 
-                                        : 'bg-amber-600 hover:bg-amber-700 text-white hover:shadow-xl hover:-translate-y-1'
-                                    }`}
-                            >
-                                {isLoading ? (
-                                    <span>Đang xử lý...</span>
-                                ) : (
-                                    <>
-                                        <span>Xác nhận đổi quà</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                                        </svg>
-                                    </>
-                                )}
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <FooterPage/>
 
             {giftHistory && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

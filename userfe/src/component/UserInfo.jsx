@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import UserOrder from './UserOrder';
 import { useNavigate } from 'react-router-dom';
+import HeaderHomePage from './UserHeaderHP';
+import FooterPage from './UserFooter';
 
 function UserFormInfo({ fetchUserInfo, initialData }) {
     const nameRef = useRef();
@@ -74,7 +76,7 @@ function UserFormInfo({ fetchUserInfo, initialData }) {
 
     return (
         <form className='bg-white p-8 rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-100 relative overflow-hidden'>
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-10"></div>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-5"></div>
             
             <h3 className="text-2xl font-extrabold text-stone-800 mb-6">Chỉnh sửa thông tin</h3>
             
@@ -202,7 +204,7 @@ function UserPersonalInfo({ toggle, userInfo, fetchError }) {
                 </div>
             ) : null}
 
-            <div className="space-y-5 flex-1 relative z-10">
+            <div className="space-y-5 flex-1 relative z-5">
                 <div className="flex items-start">
                     <div className="w-10 flex justify-center text-stone-400 mt-0.5">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,7 +257,7 @@ function UserPersonalInfo({ toggle, userInfo, fetchError }) {
                 </div>
             </div>
 
-            <div className="mt-10 pt-6 border-t border-stone-700/50 space-y-3 relative z-10">
+            <div className="mt-10 pt-6 border-t border-stone-700/50 space-y-3 relative z-5">
                 <button 
                     onClick={toggle}
                     className="w-full flex items-center justify-center space-x-2 bg-stone-700 hover:bg-stone-600 text-white font-bold py-3.5 px-4 rounded-xl transition-colors border border-stone-600"
@@ -310,26 +312,32 @@ function UserInfo() {
     }, [])
 
     return (
-        <div className='bg-stone-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 font-sans'>
-            <div className="max-w-6xl mx-auto mt-12">
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-stone-800 tracking-tight">
-                        Hồ Sơ <span className="text-amber-600">Cá Nhân</span>
-                    </h2>
-                    <p className="mt-3 text-lg text-stone-500">
-                        Quản lý thông tin cá nhân và xem lại lịch sử các đơn hàng của bạn.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    <div className="lg:col-span-5 h-full">
-                        <UserPersonalInfo toggle={HandleOrder} userInfo={userInfo} fetchError={error} />
+        <div className='bg-stone-50 min-h-screen font-sans flex flex-col justify-between'>
+            <div>
+                <HeaderHomePage />
+                
+                <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 mb-12">
+                    <div className="text-center mb-10">
+                        <h2 className="text-3xl md:text-4xl font-extrabold text-stone-800 tracking-tight">
+                            Hồ Sơ <span className="text-amber-600">Cá Nhân</span>
+                        </h2>
+                        <p className="mt-3 text-lg text-stone-500">
+                            Quản lý thông tin cá nhân và xem lại lịch sử các đơn hàng của bạn.
+                        </p>
                     </div>
-                    <div className="lg:col-span-7">
-                        <UserFormInfo fetchUserInfo={fetchUserInfo} initialData={userInfo} />
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <div className="lg:col-span-5 h-full">
+                            <UserPersonalInfo toggle={HandleOrder} userInfo={userInfo} fetchError={error} />
+                        </div>
+                        <div className="lg:col-span-7">
+                            <UserFormInfo fetchUserInfo={fetchUserInfo} initialData={userInfo} />
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <FooterPage />
 
             {order && <UserOrder onClose={HandleOrder} />}
         </div>

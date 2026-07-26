@@ -1,21 +1,38 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Emp_Header from "./Emp_Header"; 
 import "../assets/css/Emp_PersonalInfo.css"; 
 import axios from "axios";
+import { SquarePen, CircleX, LoaderCircle, CircleCheck } from "lucide-react";
 
 const Emp_PersonalInfo = () => {
-  const [personalInfo, setPersonalInfo] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // Trạng thái chỉnh sửa
+  const [isEditing, setIsEditing] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const handleButtonEdit = (type) => {
+    if (isEditing === type) {
+      setIsEditing("");
+      return;
+    } else {
+      setIsEditing(type);
+      return;
+    }
+  }
 
   const [err, setErr] = useState("");
   const [info, setInfo] = useState([]);
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [dob, setDob] = useState("");
+  const [address, setAddress] = useState("");
+  const [gender, setGender] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Giả lập dữ liệu API
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    const getInfo = async(e) => {
+    const getInfo = async() => {
+      setIsLoading(true);
+
       try {
         const res = await axios.get(
           "https://coffeeshop-api-udqx.onrender.com/employee/get/info",
@@ -27,72 +44,35 @@ const Emp_PersonalInfo = () => {
           }
         )
         setInfo(res.data);
+        setName(res.data.name);
+        setDob(res.data.dob);
         setPhone(res.data.phoneNumber);
+        setAddress(res.data.address);
+        setGender(res.data.gender);
       }
       catch(err) {
         setErr(err.message);
+      } finally {
+        setIsLoading(false);
       }
     }
     
     getInfo();
-
-    const mockData = {
-      empId: "EMP001",
-      name: "Trần Minh Hiếu",
-      dob: "28/09/1999",
-      gender: "Nam",
-      phone: "0123456789",
-      email: "hieuthuhai@coffeeshop.com",
-      address: "Hóc Môn, Tp.HCM",
-    };
-    setTimeout(() => setPersonalInfo(mockData), 500); // Giả lập delay API
   }, []);
 
-  // Hàm xử lý thay đổi thông tin cá nhân
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPersonalInfo({
-      ...personalInfo,
-      [name]: value, // Cập nhật giá trị mới cho các trường
-    });
-  };
-
-  // Hàm xử lý lưu thông tin
-  const handleSave = () => {
-    setIsEditing(false); // Đóng chế độ chỉnh sửa
-    // Giả lập lưu thông tin (thực tế sẽ gọi API)
-    console.log("Thông tin đã được lưu:", personalInfo);
-  };
-
-  const nameRef = useRef("");
-  const dobRef = useRef("");
-  const genderRef = useRef(info.gender);
-  const phoneRef = useRef("");
-  const addrRef = useRef("");
-
-  const handleChange = (e) => {
-    genderRef.current = e.target.value;
-  }
-
-  const updateEmp = async(e) => {
-    setIsEditing(true);
+  const updateEmp = async() => {
     const token = localStorage.getItem("token");
-
-    const name = nameRef.current.value;
-    const dob = dobRef.current.value;
-    const gender = genderRef.current;
-    const addr = addrRef.current.value;
 
     const emp = {
       dob: dob,
       phoneNumber: phone,
-      address: addr,
+      address: address,
       gender: gender,
       name: name
     }
 
     try {
-      const res = await axios.patch(
+      await axios.patch(
         "https://coffeeshop-api-udqx.onrender.com/employee/update/info",
         emp, {
           headers: {
@@ -101,113 +81,176 @@ const Emp_PersonalInfo = () => {
           }
         }
       )
+
+      setSuccess(true);
     }
     catch(err) {
       setErr(err.message);
     }
   }
 
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        return setSuccess(false);
+      }, 1500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
   return (
-    <div>
-      <Emp_Header /> {/* Header */}
-      <main className="emp-personal-info-main-content">
-        <h2>THÔNG TIN CÁ NHÂN</h2>
-        {personalInfo ? (
-          <div>
-            <table className="personal-info-table">
-              <tbody>
-                <tr>
-                  <td><strong>Họ và tên</strong></td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="name"
-                        onChange={handleInputChange}
-                        ref={nameRef}
-                      />
-                    ) : (
-                      info.name
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Ngày sinh</strong></td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="date"
-                        name="dob"
-                        onChange={handleInputChange}
-                        ref={dobRef}
-                      />
-                    ) : (
-                      info.dob
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Giới tính</strong></td>
-                  <td>
-                    {isEditing ? (
-                      <select
-                        name="gender"
-                        onChange={handleChange}
-                        defaultValue={info.gender}
-                      >
-                        <option value="M">Nam</option>
-                        <option value="F">Nữ</option>
-                      </select>
-                    ) : (
-                      info.gender
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>SĐT</strong></td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="phone"
-                        onChange={handleInputChange}
-                        ref={phoneRef}
-                        disabled
-                      />
-                    ) : (
-                      info.phoneNumber
-                    )}
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Địa chỉ</strong></td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        name="address"
-                        onChange={handleInputChange}
-                        ref={addrRef}
-                      />
-                    ) : (
-                      info.address
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {isEditing ? (
-              <button className="edit-button" onClick={updateEmp}>
-                Lưu thay đổi
-              </button>
-            ) : (
-              <button className="edit-button" onClick={() => setIsEditing(true)}>
-                Chỉnh sửa
-              </button>
-            )}
+    <div className="min-h-screen bg-white font-sans">
+      <Emp_Header />
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {isLoading ? (
+          <div className="bg-white flex items-center justify-center 
+                min-h-[calc(100vh-150px)] w-full">
+            <LoaderCircle className="w-10 h-10 animate-spin text-stone-400" 
+            strokeWidth={3.5}/>
           </div>
         ) : (
-          <p>Đang tải...</p>
+          err ? (
+            <div className="flex items-center justify-center flex-col bg-red-100 border-2 border-red-200
+            py-10 rounded-lg gap-2">
+              <CircleX className="w-10 h-10 text-red-500 "/>
+              <p className="font-semibold">Đã xảy ra lỗi khi truy cập trang web</p>
+            </div>
+          ) : 
+          (
+            <div className="border-2 border-gray-100 rounded-lg px-4 py-6">
+              <p className="font-semibold text-lg">
+                Thông tin cá nhân
+              </p>
+              <p>Quản lý thông tin cá nhân chi tiết bao gồm tên, ngày sinh, giới tính, số điện thoại và địa chỉ</p>
+
+              <div className="grid grid-cols-2 mt-4 gap-x-8 gap-y-4">
+                <div>
+                  <p className="pb-1">Họ và tên</p>
+                  <div className="flex flex-1 justify-between gap-4 items-center">
+                    <input type="text"
+                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
+                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    id="personalName"
+                    value={info.name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={isEditing !== "change-name"}/>
+
+                    <button
+                    type="button"
+                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
+                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    onClick={() => handleButtonEdit("change-name")}>
+                      <SquarePen className="w-5 h-5"/>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="pb-1">Ngày sinh</p>
+                  <div className="flex flex-1 justify-between gap-4 items-center">
+                    <input type="date"
+                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
+                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    id="personalDob"
+                    value={info.dob}
+                    onChange={(e) => setDob(e.target.value)}
+                    disabled={isEditing !== "change-dob"}/>
+
+                    <button
+                    type="button"
+                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
+                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    onClick={() => handleButtonEdit("change-dob")}>
+                      <SquarePen className="w-5 h-5"/>
+                    </button>
+                  </div>
+                </div>
+
+
+                <div>
+                  <p className="pb-1">Số điện thoại</p>
+                  <div className="flex flex-1 justify-between gap-4 items-center">
+                    <input type="text" 
+                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
+                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    id="personalPhone"
+                    value={info.phoneNumber}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={isEditing !== "change-phone"}/>
+
+                    <button
+                    type="button"
+                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
+                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    onClick={() => handleButtonEdit("change-phone")}>
+                      <SquarePen className="w-5 h-5"/>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="pb-1">Địa chỉ</p>
+                  <div className="flex flex-1 justify-between gap-4 items-center">
+                    <input type="text"
+                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
+                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    id="personalAddress"
+                    value={info.address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    disabled={isEditing !== "change-address"} />
+
+                    <button
+                    type="button"
+                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
+                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    onClick={() => handleButtonEdit("change-address")}>
+                      <SquarePen className="w-5 h-5"/>
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="pb-1">Giới tính</p>
+                  <div className="flex flex-1 justify-between gap-4 items-center">
+                    <select
+                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
+                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    id="personalGender"
+                    value={info.gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    disabled={isEditing !== "change-gender"}>
+                      <option value="M">Nam</option>
+                      <option value="F">Nữ</option>
+                    </select>
+
+                    <button
+                    type="button"
+                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
+                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    onClick={() => handleButtonEdit("change-gender")}>
+                      <SquarePen className="w-5 h-5"/>
+                    </button>
+                  </div>  
+                </div>
+
+                <div className="flex items-end justify-end">
+                  <button className="py-1 px-8 bg-emerald-300 rounded-lg font-semibold
+                  hover:bg-emerald-400 hover:text-stone-900 transition-colors duration-200"
+                  onClick={() => updateEmp()}>
+                    Lưu
+                  </button>
+                </div>
+              </div>
+
+              {success && <div className="absolute z-10 left-1/2 -translate-x-1/2 top-[80px] flex 
+              bg-emerald-300 py-3 px-6 rounded-lg gap-2 items-center">
+                <CircleCheck className="w-8 h-8 text-emerald-700"/>
+                <p className="font-semibold">Cập nhật thông tin thành công!</p>
+              </div>}
+            </div>
+          )
         )}
       </main>
     </div>

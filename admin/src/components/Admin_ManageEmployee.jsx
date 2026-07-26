@@ -131,61 +131,6 @@ const Admin_ManageEmployee = () => {
         <div>
             <Admin_Header />
 
-            {/* Nội dung chính
-            <h2 className="employee-title">
-                QUẢN LÝ NHÂN VIÊN
-                <button 
-                    className="manage-employee-btn"
-                    style={{ marginLeft: 'auto', marginRight: '90px' }}
-                    onClick={() => navigate('/admin/manage-employee/edit')}
-                >
-                    Quản lý thông tin nhân viên
-                </button>
-            </h2>
-
-            <div className="employee-table-container">
-                <table id="employee-table">
-                    <thead>
-                        <tr>
-                            <th>ID Nhân viên</th>
-                            <th>Tên Nhân viên</th>
-                            <th>Số điện thoại</th>
-                            <th>Ngày bắt đầu làm việc</th>
-                            <th>Vị trí</th>
-                            <th>Tổng lương</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody className="filter-row">
-                        <tr>
-                            <td><input type="text" id="idEmployee" className="filter-input" placeholder="Lọc theo ID" onChange={handleFilterChange} /></td>
-                            <td><input type="text" id="nameEmployee" className="filter-input" placeholder="Lọc theo tên" onChange={handleFilterChange} /></td>
-                            <td><input type="text" id="phone" className="filter-input" placeholder="Lọc theo số điện thoại" onChange={handleFilterChange} /></td>
-                            <td><input type="text" id="startDate" className="filter-input" placeholder="Lọc theo ngày bắt đầu" onChange={handleFilterChange} /></td>
-                            <td><input type="text" id="position" className="filter-input" placeholder="Lọc theo vị trí" onChange={handleFilterChange} /></td>
-                            <td><button className="button-salary-update" onClick={calSalary}>Cập nhật</button></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    <tbody id="employee-data">
-                        {emp.map((employee, index) => (
-                            <tr key={index}>
-                                <td>{employee.id}</td>
-                                <td>{employee.name}</td>
-                                <td>{employee.phoneNumber}</td>
-                                <td>{employee.startDate}</td>
-                                <td>{employee.position}</td>
-                                <td>{formatSalary(employee.totalSalary)}</td>
-                                <td><input type="radio" name='salary'
-                                value={employee.id}
-                                checked={selectedEmployeeId === employee.id}
-                                onChange={() => handleRadioChange(employee.id)}/></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div> */}
-
             <main className="mx-auto px-4 py-8 sm:px-6 max-w-7xl font-sans">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                     <h2 className="text-4xl font-black text-stone-900 mt-0 tracking-tight">
@@ -204,7 +149,8 @@ const Admin_ManageEmployee = () => {
                         {isLoading ?
                             (
                                 <div className="flex items-center justify-center p-4 min-h-[calc(100vh-250px)]">
-                                    <Loader2 className="w-8 h-8 animate-spin text-amber-600">
+                                    <Loader2 className="w-10 h-10 animate-spin text-amber-500"
+                                    strokeWidth={3.5}>
                                     </Loader2>
                                 </div>) :
                             (<ul className="gap-4 flex flex-col min-h-[calc(100vh-250px)] overflow-y-auto">

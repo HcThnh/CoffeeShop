@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Admin_Header from './Admin_Header'; 
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import { Tag, ALargeSmall } from 'lucide-react';
 
 const Admin_ManageProduct = () => {
     const navigate = useNavigate(); 
@@ -63,8 +64,7 @@ const Admin_ManageProduct = () => {
             <Admin_Header />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
                     <div>
                         <h2 className="text-4xl font-black text-stone-900 mt-0 tracking-tight mt-0">Thực Đơn Đồ Uống</h2>
                     </div>
@@ -79,7 +79,6 @@ const Admin_ManageProduct = () => {
                     </button>
                 </div>
 
-                {/* Error Message */}
                 {err && (
                     <div className="mb-8 bg-red-50 text-red-600 p-5 rounded-2xl text-sm font-bold border border-red-100 flex items-center shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -89,17 +88,32 @@ const Admin_ManageProduct = () => {
                     </div>
                 )}
 
-                {/* Glassmorphism Filter Section */}
-                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-stone-200 mb-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                        <div className="relative lg:col-span-2 xl:col-span-2">
-                            <input type="text" id="name" placeholder="Tên Sản phẩm (Ví dụ: Trà Sen Vàng)" onChange={handleFilterChange} 
-                                className="w-full px-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
-                        <div className="relative">
-                            <input type="text" id="price" placeholder="Đơn giá" onChange={handleFilterChange} 
-                                className="w-full px-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-4">
+                    <div className="relative group xl:col-span-2">
+                        <ALargeSmall className="absolute top-1/2 -translate-y-1/2 left-3 text-stone-400
+                        group-focus-within:text-amber-500"/>
+                        <input type="text"
+                        id='name'
+                        placeholder='Tên sản phẩm...'
+                        onChange={handleFilterChange}
+                        className="w-full pl-11 pr-4 py-3 rounded-lg border-none bg-white
+                        focus:ring-2 focus:ring-amber-500 outline-none
+                        font-medium text-stone-700 transition-all
+                        placeholder-stone-400 text-sm"/>
+                    </div>
+
+                    <div className="relative group">
+                        <Tag className="absolute top-1/2 -translate-y-1/2 left-3 text-stone-400
+                        group-focus-within:text-amber-500"/>
+
+                        <input type="text" 
+                        id="price"
+                        placeholder="Đơn giá"
+                        onChange={handleFilterChange}
+                        className="w-full pl-11 pr-4 py-3 rounded-lg border-none bg-white
+                        focus:ring-2 focus:ring-amber-500 outline-none
+                        font-medium text-stone-700 transition-all
+                        placeholder-stone-400 text-sm"/>
                     </div>
                 </div>
 

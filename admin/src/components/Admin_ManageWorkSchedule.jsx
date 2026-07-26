@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import Admin_Header from './Admin_Header'; 
 import axios from 'axios';
+import { Rows3, IdCard } from 'lucide-react';
 
 const Admin_ManageWorkSchedule = () => {
     const navigate = useNavigate();
@@ -10,10 +11,8 @@ const Admin_ManageWorkSchedule = () => {
     const [err, setErr] = useState("");
 
     const [filters, setFilters] = useState({
-        date: '',
         shiftId: '',
         employeeId: '',
-        employeeName: '',
     });
 
     useEffect(() => {
@@ -49,12 +48,10 @@ const Admin_ManageWorkSchedule = () => {
     };
 
     const filteredSchedule = schedule.filter((item) => {
-        const dateMatch = !filters.date || (item.date && item.date.toLowerCase().includes(filters.date));
-        const shiftIdMatch = !filters.shiftId || (item.id?.shiftId && item.id.shiftId.toLowerCase().includes(filters.shiftId));
-        const employeeIdMatch = !filters.employeeId || (item.id?.employeeId && item.id.employeeId.toLowerCase().includes(filters.employeeId));
-        const employeeNameMatch = !filters.employeeName || (item.employeeName && item.employeeName.toLowerCase().includes(filters.employeeName));
+        const shiftIdMatch = !filters.shiftId || (item.id?.shiftId && String(item.id.shiftId).toLowerCase().includes(filters.shiftId));
+        const employeeIdMatch = !filters.employeeId || (item.id?.employeeId && String(item.id.employeeId).toLowerCase().includes(filters.employeeId));
         
-        return dateMatch && shiftIdMatch && employeeIdMatch && employeeNameMatch;
+        return shiftIdMatch && employeeIdMatch;
     });
 
     const handleCreateWorkSchedule = () => {
@@ -83,7 +80,6 @@ const Admin_ManageWorkSchedule = () => {
                     </button>
                 </div>
 
-                {/* Error Message */}
                 {err && (
                     <div className="mb-8 bg-red-50 text-red-600 p-5 rounded-2xl text-sm font-bold border border-red-100 flex items-center shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,41 +89,28 @@ const Admin_ManageWorkSchedule = () => {
                     </div>
                 )}
 
-                {/* Glassmorphism Filter Section */}
-                <div className="bg-white/60 backdrop-blur-md p-6 rounded-3xl shadow-sm border border-stone-200 mb-8">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                            </div>
-                            <input type="text" id="date" placeholder="Ngày (VD: 25/04)" onChange={handleFilterChange} 
-                                className="w-full pl-11 pr-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
-                            </div>
-                            <input type="text" id="shiftId" placeholder="Mã Ca" onChange={handleFilterChange} 
-                                className="w-full pl-11 pr-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
-                            </div>
-                            <input type="text" id="employeeId" placeholder="Mã Nhân viên" onChange={handleFilterChange} 
-                                className="w-full pl-11 pr-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
-                        <div className="relative">
-                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                            </div>
-                            <input type="text" id="employeeName" placeholder="Tên Nhân viên" onChange={handleFilterChange} 
-                                className="w-full pl-11 pr-4 py-3 rounded-2xl border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 transition-all placeholder-stone-400" />
-                        </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-4">
+                    <div className="relative group">
+                        <Rows3 className="absolute top-1/2 -translate-y-1/2 left-3 text-stone-400
+                        group-focus-within:text-amber-500" />
+
+                        <input type="text" id="shiftId" placeholder="Mã Ca" onChange={handleFilterChange} 
+                            className="w-full pl-11 pr-4 py-3 rounded-lg border-none bg-white shadow-sm focus:ring-2 focus:ring-amber-500 outline-none 
+                            font-medium text-stone-700 transition-all placeholder-stone-400 text-sm" />
+                    </div>
+
+                    <div className="relative group">
+                        <IdCard className="absolute top-1/2 -translate-y-1/2 left-3 text-stone-400
+                        group-focus-within:text-amber-500"/>
+
+                        <input type="text" id="employeeId" placeholder="Mã Nhân viên" onChange={handleFilterChange} 
+                            className="w-full pl-11 pr-4 py-3 rounded-lg border-none bg-white shadow-sm 
+                            focus:ring-2 focus:ring-amber-500 outline-none font-medium text-stone-700 
+                            transition-all placeholder-stone-400 text-sm" />
                     </div>
                 </div>
 
-                {/* Data Grid */}
+
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-20">
                         <svg className="animate-spin h-10 w-10 text-amber-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -149,10 +132,10 @@ const Admin_ManageWorkSchedule = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredSchedule.map((item, index) => (
-                            <div key={index} className="bg-white rounded-3xl p-6 shadow-sm border border-stone-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+                            <div key={index} className="bg-white rounded-3xl p-6 shadow-sm border border-stone-200 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
                                 
                                 {/* Decorative top border */}
-                                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-400 to-orange-500"></div>
+                                <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-400"></div>
 
                                 <div className="flex justify-between items-start mb-6 pt-2">
                                     <div>
@@ -178,9 +161,6 @@ const Admin_ManageWorkSchedule = () => {
                                 </div>
 
                                 <div className="flex items-center pt-4 border-t border-stone-100">
-                                    <div className="h-10 w-10 rounded-full bg-stone-800 text-white flex items-center justify-center font-bold text-sm shadow-md mr-3 shrink-0 group-hover:bg-amber-500 transition-colors">
-                                        {item.employeeName ? item.employeeName.charAt(0).toUpperCase() : '?'}
-                                    </div>
                                     <div className="overflow-hidden">
                                         <p className="text-sm font-black text-stone-800 truncate">{item.employeeName || "Không xác định"}</p>
                                         <p className="text-xs font-medium text-stone-400 font-mono mt-0.5 truncate flex items-center">

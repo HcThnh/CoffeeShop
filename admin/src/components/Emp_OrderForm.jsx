@@ -1,54 +1,23 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Emp_Header from "./Emp_Header"; 
 import "../assets/css/Emp_OrderForm.css"; 
 import axios from "axios";
 
 import traSenVangImage from "../assets/img/tra-sen-vang.svg";
-import phindiChocoImage from "../assets/img/phindi.svg";
-import phindiCassiaImage from "../assets/img/Phindi-Cassia.jpg";
-import freezeTraxanhImage from "../assets/img/FREEZE-TRA-XANH.jpg";
-import freezeChocoImage from "../assets/img/FREEZE-CHOCO.jpg";
-import traThachDaoImage from "../assets/img/TRA_THANH_DAO.jpg";
-import traThachVaiImage from "../assets/img/TRA_TACH_VAI.jpg";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
+import { LoaderCircle, CircleCheck } from "lucide-react";
 
-// Hàm định dạng giá tiền
 const formatPrice = (price) => {
   return price.toLocaleString("vi-VN") + "đ";
 };
 
 const Emp_OrderForm = () => {
-  const [notification, setNotification] = useState(""); // Trạng thái thông báo
-  const [orderDetails, setOrderDetails] = useState([]); // Lưu thông tin đơn hàng
-  const [customerId, setCustomerId] = useState(""); // Mã khách hàng
-  const [pointsUsed, setPointsUsed] = useState(0); // Điểm sử dụng
-
-  // Dữ liệu sản phẩm
-  const mockProductData = [
-    { id: "001", name: "Trà sen vàng", price: 46000, image: traSenVangImage },
-    { id: "002", name: "Phindi choco", price: 47000, image: phindiChocoImage },
-    { id: "003", name: "Phindi Cassia", price: 50000, image: phindiCassiaImage },
-    { id: "004", name: "Freeze trà xanh", price: 42000, image: freezeTraxanhImage },
-    { id: "005", name: "Freeze Choco", price: 44000, image: freezeChocoImage },
-    { id: "006", name: "Trà thanh đào", price: 45000, image: traThachDaoImage },
-    { id: "007", name: "Trà thanh vải", price: 40000, image: traThachVaiImage },
-    { id: "001", name: "Trà sen vàng", price: 46000, image: traSenVangImage },
-    { id: "002", name: "Phindi choco", price: 47000, image: phindiChocoImage },
-    { id: "003", name: "Phindi Cassia", price: 50000, image: phindiCassiaImage },
-    { id: "004", name: "Freeze trà xanh", price: 42000, image: freezeTraxanhImage },
-    { id: "005", name: "Freeze Choco", price: 44000, image: freezeChocoImage },
-    { id: "006", name: "Trà thanh đào", price: 45000, image: traThachDaoImage },
-    { id: "007", name: "Trà thanh vải", price: 40000, image: traThachVaiImage },
-    { id: "001", name: "Trà sen vàng", price: 46000, image: traSenVangImage },
-    { id: "002", name: "Phindi choco", price: 47000, image: phindiChocoImage },
-    { id: "003", name: "Phindi Cassia", price: 50000, image: phindiCassiaImage },
-    { id: "004", name: "Freeze trà xanh", price: 42000, image: freezeTraxanhImage },
-    { id: "005", name: "Freeze Choco", price: 44000, image: freezeChocoImage },
-    { id: "006", name: "Trà thanh đào", price: 45000, image: traThachDaoImage },
-    { id: "007", name: "Trà thanh vải", price: 40000, image: traThachVaiImage },
-  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [productName, setProductName] = useState("");
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+
+  const [success, setSuccess] = useState(false);
 
   const addProductToOrder = (product) => {
     setSelectedProducts((prevProducts) => {
@@ -66,60 +35,32 @@ const Emp_OrderForm = () => {
     });
   };  
 
-  // Cập nhật số lượng món
-  const updateQuantity = (id, action) => {
-    setOrderDetails(orderDetails.map(item =>
-      item.id === id
-        ? { 
-            ...item, 
-            quantity: action === "increase" 
-              ? item.quantity + 1 
-              : item.quantity === 1 
-              ? 0 // Xóa món khi số lượng là 1 và nhấn nút giảm
-              : item.quantity - 1
-        }
-        : item
-    ).filter(item => item.quantity > 0)); // Xóa món khỏi đơn hàng nếu số lượng là 0
+  const updateQuantity = (productId, action) => {
+    setSelectedProducts((prevProducts) =>
+      prevProducts
+        .map((item) =>
+          item.productId === productId
+            ? { 
+                ...item, 
+                quantity: action === "increase" 
+                  ? item.quantity + 1 
+                  : item.quantity === 1 
+                  ? 0 
+                  : item.quantity - 1 
+              }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
+    );
   };
-
-  // Tính tổng tiền và tích điểm
-  const calculateTotal = () => {
-    let subtotal = 0;
-    orderDetails.forEach(item => {
-      subtotal += item.price * item.quantity;
-    });
-
-    // Tính voucher giảm giá
-    const discountAmount = (pointsUsed / 10 > 25 ? 25 : pointsUsed / 10) / 100;
-    const totalAfterDiscount = subtotal * (1 - discountAmount);
-
-    const pointsEarned = Math.floor(totalAfterDiscount / 100); // Tích điểm
-
-    return {
-      totalAfterDiscount,
-      pointsEarned,
-      discountAmount: discountAmount * 100, // Chuyển đổi về % để hiển thị
-    };
-  };
-
-  // Xử lý xác nhận đơn hàng
-  const handleConfirmOrder = () => {
-    setNotification("Tạo đơn hàng thành công");
-    setTimeout(() => {
-      setNotification(""); // Reset thông báo
-      setOrderDetails([]); // Reset đơn hàng
-      setCustomerId(""); // Reset ID khách hàng
-      setPointsUsed(0); // Reset điểm sử dụng
-    }, 3000); // Sau 3 giây reset đơn hàng
-  };
-
-  const { totalAfterDiscount, pointsEarned, discountAmount } = calculateTotal();
 
   const [err, setErr] = useState("");
   const [ord, setOrd] = useState([]);
 
   useEffect(() => {
-    const getOrder = async(e) => {
+    const getOrder = async() => {
+      setIsLoading(true);
+
       try {
         const token = await axios.get(
           "https://coffeeshop-api-udqx.onrender.com/public/menu",
@@ -131,25 +72,28 @@ const Emp_OrderForm = () => {
         )
         setOrd(token.data);
       }
-      catch(err) {
-        setErr(err.message);
+      catch(error) {
+        setErr(error.message);
+        console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     getOrder();
   }, []);
 
-  const chunkArray = (arr, chunkSize) => {
-    const chunks = [];
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess(false);
+      }, 1500);
 
-    for (let i = 0; i < arr.length; i += chunkSize) {
-      chunks.push(arr.slice(i, i + chunkSize));
+      return () => clearTimeout(timer);
     }
-    return chunks;
-  }
+  }, [success]);
 
-  const orderChunks = chunkArray(ord, 5);
-  const phoneRef = useRef("");
+  const [phone, setPhone] = useState("");
 
   const createOrder = async(e) => {
     e.preventDefault();
@@ -160,7 +104,6 @@ const Emp_OrderForm = () => {
     const day = String(today.getDate()).padStart(2, '0');
 
     const dateString = `${year}-${month}-${day}`;
-    const phone = phoneRef.current.value;
     
     if (!phone || phone.trim() === "") {
       alert("Vui lòng nhập số điện thoại khách hàng.");
@@ -179,7 +122,7 @@ const Emp_OrderForm = () => {
     const token = localStorage.getItem("token");
     console.log(order);
     try {
-      const res = await axios.post(
+      await axios.post(
         "https://coffeeshop-api-udqx.onrender.com/employee/order/create",
         order, {
           headers: {
@@ -188,6 +131,9 @@ const Emp_OrderForm = () => {
           }
         }
       )
+
+      setPhone("");
+      setSuccess(true);
     }
     catch(err) {
       setErr(err.message);
@@ -195,78 +141,147 @@ const Emp_OrderForm = () => {
     setSelectedProducts([]);
   }
 
+  const filterProduct = useMemo(() => {
+    const searchTerm = productName.toLowerCase().trim();
+
+    return ord.filter((product) => {
+      return (product?.name ?? "").toLowerCase().includes(searchTerm);
+    })
+  }, [productName, ord]);
+
   return (
-    <div>
-      <Emp_Header /> {/* Header */}
-      <main className="orderform-main-content">
-        <div className="menu">
-          {orderChunks.map((chunk, rowIndex) => (
-            <div className="inMenu" key={rowIndex}>
-              {chunk.map((product, index) => (
-                <div className="item" key={index} onClick={() => addProductToOrder(product)}>
-                  <a href="#" className="product-link">
-                    <img src={traSenVangImage} alt={product.name} className="product-image" />
-                  </a>
-                  <p>{product.name}</p>
-                  <p>{formatPrice(product.unit_price)}</p>
+    <div className="min-h-screen bg-stone-100 font-sans">
+      <Emp_Header />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex justify-between gap-4">
+        {isLoading ? (
+          <div className="bg-stone-100 flex items-center justify-center 
+                min-h-[calc(100vh-150px)] w-full">
+            <LoaderCircle className="w-10 h-10 animate-spin text-stone-400" 
+            strokeWidth={3.5}/>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            <div className="p-2 flex-1">
+              <input type="text"
+              placeholder="Nhập tên sản phẩm..."
+              className="lg:w-[400px] px-2 py-2 placeholder:text-sm border border-gray-300 
+              rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-300"
+              id="nameProduct"
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}/>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 p-2">
+              {filterProduct.map((product, index) => (
+                <div 
+                  key={product.id || index} 
+                  onClick={() => addProductToOrder(product)}
+                  className="group relative bg-white border border-gray-100 rounded-2xl p-3
+                            shadow-sm hover:shadow-xl 
+                            transition-all duration-300 cursor-pointer flex flex-col justify-between
+                            overflow-hidden"
+                >
+                  <div>
+                    <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-50 mb-3">
+                      <img 
+                        src={traSenVangImage} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                      />
+                    </div>
+
+                    <p className="font-sans font-semibold text-gray-800 text-sm md:text-base line-clamp-2 mb-1 group-hover:text-amber-600 transition-colors">
+                      {product.name}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-50 mt-2">
+                    <p className="font-sans font-bold text-amber-600 text-sm md:text-base">
+                      {formatPrice(product.unit_price)}
+                    </p>
+                    
+                    <span className="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold group-hover:bg-amber-500 group-hover:text-white transition-all shadow-sm">
+                      +
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
-          ))}
-        </div>
-        <div className="order">
-          <h2>Đơn hàng</h2>
-          <div className="order-details" id="order-details">
-            <p>Khách hàng: 
-              <input 
-                type="text" 
-                placeholder="Nhập ID khách hàng" 
-                ref={phoneRef}
-              />
-            </p>
-            {selectedProducts.map((selectedItem, index) => {
-              // Tìm sản phẩm trong mảng 'ord' có id trùng với selectedItem.id
-              const ordItem = ord.find((item) => item.id === selectedItem.productId);
+          </div>
+        )}
 
-              // Nếu không tìm thấy sản phẩm trong 'ord', bỏ qua phần tử này
-              if (!ordItem) return null;
-
-              return (
-                <div className="order-item" key={index}>
-                  <span>{ordItem.name}</span>
-                  <div className="quantity-control">
-                    <span onClick={() => updateQuantity(selectedItem.productId, "decrease")}>-</span>
-                    <span>{selectedItem.quantity}</span>
-                    <span onClick={() => updateQuantity(selectedItem.productId, "increase")}>+</span>
-                  </div>
-                  <span>{formatPrice(ordItem.unit_price * selectedItem.quantity)}</span>
-                </div>
-              );
-            })}
-            {/* <div className="summary">
-              <p>Điểm sử dụng: 
+        <div className="md:flex flex-col hidden">
+          <div className="py-2 px-3 border border-gray-300 rounded-lg max-h-fit flex flex-col
+          bg-white">
+            <h2 className="m-4 font-semibold ">
+              Đơn hàng</h2>
+            <div>
+              <p className="flex flex-col gap-2">
+                Khách hàng: 
                 <input 
-                  type="number" 
-                  value={pointsUsed} 
-                  onChange={(e) => setPointsUsed(Number(e.target.value))} 
-                  min="0" 
+                  type="text" 
+                  placeholder="Nhập số điện thoại khách hàng"
+                  className="font-sans mb-4 text-sm text-gray-800 bg-transparent border-0 border-b-2
+                  border-gray-300 rounded-none placeholder:text-gray-400 placeholder:font-normal
+                  focus:outline-none focus:border-amber-500 transition-colors duration-200
+                  py-2 px-1"
+                  id="phoneNumber"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </p>
-              <p>Voucher giảm giá: {discountAmount}%</p>
-              <p>Tích điểm: {pointsEarned}</p>
-              <p><strong>Tổng: {formatPrice(totalAfterDiscount)}</strong></p>
-            </div> */}
-            <button id="confirm-order" onClick={createOrder}>Xác nhận</button>
+              {selectedProducts.map((selectedItem, index) => {
+                const ordItem = ord.find((item) => item.id === selectedItem.productId);
+
+                if (!ordItem) return null;
+
+                return (
+                  <div className="py-1 grid grid-cols-[1fr_1fr_1fr] items-center gap-3" key={index}>
+                    <span className="font-semibold">{ordItem.name}</span>
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => updateQuantity(selectedItem.productId, "decrease")}
+                      className="cursor-pointer p-1 rounded-full hover:bg-stone-300
+                      bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-gray-700
+                      transition-colors select-none"
+                      type="button">-</button>
+                      <span>{selectedItem.quantity}</span>
+                      <button onClick={() => updateQuantity(selectedItem.productId, "increase")}
+                      className="cursor-pointer p-1 rounded-full hover:bg-stone-300
+                      bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-gray-700
+                      transition-colors select-none"
+                      type="button">+</button>
+                    </div>
+                    <span className="flex justify-end">
+                      {formatPrice(ordItem.unit_price * selectedItem.quantity)}</span>
+                  </div>
+                );
+              })}
+
+              <div className="flex justify-center">
+                <button id="confirm-order"
+                className="mt-5 mb-3 py-1 px-3 rounded-lg bg-emerald-300 font-semibold
+                hover:bg-emerald-400 transition-all duration-200"
+                onClick={createOrder}>
+                  Xác nhận
+                </button>
+              </div>
+            </div>
           </div>
+
+          {err && (
+            <div className="mt-4 p-3 border-2 border-red-200 bg-red-50 rounded-lg">
+              <p className="text-red-600 font-semibold">Không thể tạo đơn hàng</p>
+              <p className="text-red-500">Kiểm tra lại số điện thoại khách hàng</p>
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Thông báo */}
-      {notification && (
-        <div className="notification show">
-          {notification}
-        </div>
-      )}
+      {success && <div className="absolute z-10 top-[80px] left-1/2 -translate-x-1/2 flex
+      bg-emerald-300 py-3 px-6 rounded-lg items-center gap-2">
+        <CircleCheck className="w-8 h-8 text-emerald-700 " />  
+        <p className="font-semibold">Tạo đơn hàng thành công</p>
+      </div>}
     </div>
   );
 };

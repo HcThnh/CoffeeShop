@@ -1,31 +1,64 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { X, Star, CircleX, LoaderCircle } from 'lucide-react';
 
-function UserFeedBack({toggleVisibility, response, proID, selectedProduct}) {
+function UserFeedBack({ onClose, product }) {
     const getCurrentDate = () => {
-        const today = new Date(); 
-        const day = String(today.getDate()).padStart(2, '0'); 
-        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
         const year = today.getFullYear();
         return `${year}-${month}-${day}`;
     };
 
-    const FeedBackRef = useRef();
     const [selectedRating, setSelectedRating] = useState(5);
     const [err, setErr] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [token, setToken] = useState("");
+
+    const [text, setText] = useState("");
+    const [response, setResponse] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errReview, setErrReview] = useState("");
+    const avg = response.length > 0
+        ? (response.reduce((sum, review) => sum + (review.score || 0), 0) / response.length).toFixed(1)
+        : (product.rating || 0);
+
+    const fetchReview = async (productID) => {
+        setIsLoading(true);
+
+        try {
+            const item = await axios.get(
+                `https://coffeeshop-api-udqx.onrender.com/public/product/review`,
+                {
+                    params: { productId: productID },
+                    headers: { "Content-Type": "application/json" }
+                }
+            )
+            if (!item.data || (Array.isArray(item.data) && item.data.length === 0)) {
+                setResponse([]);
+                return;
+            }
+            setResponse(item.data);
+        }
+        catch (err) {
+            setErrReview(err);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     useEffect(() => {
-        setToken(localStorage.getItem("token") || "");
+        fetchReview(product.id);
     }, []);
 
     const SendFeedBack = async () => {
-        const comment = FeedBackRef.current?.value.trim();
+        const comment = text.trim();
         if (!comment) {
             setErr("Vui lòng nhập nội dung đánh giá!");
             return;
         }
+
+        const token = localStorage.getItem("token");
 
         setIsSubmitting(true);
         setErr("");
@@ -34,125 +67,170 @@ function UserFeedBack({toggleVisibility, response, proID, selectedProduct}) {
             date: getCurrentDate(),
             score: selectedRating,
             comment: comment,
-            productId: proID
+            productId: product.id
         };
 
         try {
             await axios.post(
                 "https://coffeeshop-api-udqx.onrender.com/customer/review/create",
                 cmt, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json"
-                    }
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
                 }
+            }
             );
-            toggleVisibility(); // Đóng form sau khi thành công
-        } catch(error) {
+            fetchReview(product.id);
+        } catch (error) {
             setErr(error.response?.data?.message || error.message || "Không thể gửi đánh giá!");
             setIsSubmitting(false);
         }
     }
 
-    // Lấy tên sản phẩm từ selectedProduct (truyền từ UserProduct.jsx) 
-    // hoặc lấy fallback từ response (nếu có review cũ)
-    const productName = selectedProduct?.name || (response && response[0] ? response[0].productName : "Sản phẩm");
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Background Blur Overlay */}
-            <div 
-                className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm transition-opacity" 
-                onClick={toggleVisibility}
-            ></div>
-            
-            {/* Modal Container */}
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col md:flex-row relative z-10 font-sans transform transition-all scale-100 opacity-100">
-                
-                {/* Left Side: Product Info (Avatar & Name) */}
-                <div className="bg-stone-50 w-full md:w-2/5 p-6 md:p-8 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-stone-100">
-                    <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden shadow-lg border-4 border-white mb-4">
-                        <img 
-                            src="/270_crop_Phindi_Cassia_Highlands_products_Image1.jpg"
-                            alt={productName} 
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                    <h3 className="text-xl font-bold text-stone-800 text-center leading-snug">{productName}</h3>
-                    <p className="text-sm text-stone-500 mt-2 text-center px-4">Chúng tôi luôn trân trọng mọi ý kiến đóng góp của bạn.</p>
+        <div className="min-h-screen fixed top-0 left-0 right-0 bg-gray-400/40 z-20
+        flex justify-end">
+            <div className="w-2/5 bg-white min-h-screen px-6 py-4 flex flex-col gap-4
+            animate-slide-in-right">
+                <div className="flex justify-end w-full">
+                    <X size={32} className='p-1 rounded-full hover:bg-amber-100
+                    hover:text-amber-500 transition-colors duration-200 cursor-pointer'
+                        onClick={onClose} />
                 </div>
 
-                {/* Right Side: Feedback Form */}
-                <div className="w-full md:w-3/5 p-6 md:p-8 flex flex-col relative">
-                    {/* Close Button */}
-                    <button 
-                        onClick={toggleVisibility}
-                        className="absolute top-4 right-4 p-2 bg-stone-50 hover:bg-red-50 text-stone-400 hover:text-red-500 rounded-full transition-colors"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                <div className="grid grid-cols-[1fr_4fr] py-4 px-4 gap-4 border-2 border-gray-100 rounded-xl">
+                    <div className='overflow-hidden'>
+                        <img src="/coffee.jpg" alt="sample-image"
+                            className="object-cover" />
+                    </div>
 
-                    <h2 className="text-2xl font-extrabold text-stone-800 mb-6 mt-2 md:mt-0">Đánh giá sản phẩm</h2>
-                    
-                    {/* Error Banner */}
-                    {err && (
-                        <div className="bg-red-50 text-red-600 p-3 rounded-xl text-sm font-medium border border-red-100 mb-4 flex items-start animate-pulse">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {err}
+                    <div className="flex flex-col justify-start">
+                        <div className="flex items-center justify-between">
+                            <p className="font-medium text-lg">{product.name}</p>
+                            <div className="flex items-center gap-1 bg-amber-100 py-1 px-4 rounded-lg">
+                                <p className="font-medium">{avg}</p>
+                                <Star size={16} className="fill-yellow-500 stroke-yellow-500" />
+                            </div>
                         </div>
-                    )}
 
-                    {/* Star Rating System */}
-                    <div className="mb-6">
-                        <label className="block text-sm font-bold text-stone-700 mb-2">Bạn chấm mấy điểm?</label>
-                        <div className="flex space-x-2">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <button
-                                    key={star}
-                                    type="button"
-                                    onClick={() => setSelectedRating(star)}
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all transform hover:scale-110 ${
-                                        selectedRating >= star 
-                                            ? 'bg-amber-100 text-amber-500 shadow-sm border border-amber-200' 
-                                            : 'bg-stone-100 text-stone-300 hover:bg-stone-200'
+                        <p className="text-lg font-semibold">{product.unit_price.toLocaleString("vi-VN")} VNĐ</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2 px-1">
+                    <p className="text-sm font-semibold text-stone-700">Đánh giá của bạn:</p>
+                    <div className="flex gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                            <Star
+                                key={star}
+                                size={22}
+                                className={`cursor-pointer transition-all duration-150 transform hover:scale-110 ${star <= selectedRating
+                                        ? 'fill-amber-400 stroke-amber-500'
+                                        : 'stroke-gray-300 hover:stroke-amber-400'
                                     }`}
-                                >
-                                    &#9733;
-                                </button>
-                            ))}
-                        </div>
+                                onClick={() => setSelectedRating(star)}
+                            />
+                        ))}
                     </div>
+                </div>
 
-                    {/* Text Area */}
-                    <div className="flex-1 mb-6 flex flex-col">
-                        <label htmlFor="comment" className="block text-sm font-bold text-stone-700 mb-2">Chia sẻ trải nghiệm của bạn</label>
-                        <textarea 
-                            id="comment"
-                            ref={FeedBackRef}
-                            className="w-full flex-1 min-h-[120px] px-4 py-3 rounded-xl border border-stone-200 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all outline-none bg-stone-50 focus:bg-white text-stone-800 resize-none"
-                            placeholder="Sản phẩm này tuyệt vời như thế nào?..."
-                        ></textarea>
-                    </div>
+                <div className="flex flex-col relative">
+                    <textarea
+                        id="comment"
+                        rows={3}
+                        maxLength={100}
+                        placeholder="Thêm bình luận"
+                        className="w-full px-4 pt-3 pb-8 rounded-xl bg-stone-100 focus:outline-none 
+                        text-sm text-stone-800"
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                    />
 
-                    {/* Submit Button */}
-                    <button 
+                    <p className="text-xs text-gray-500 absolute bottom-3 left-4">
+                        Số ký tự còn lại {100 - text.length}</p>
+
+                    <button
                         onClick={SendFeedBack}
                         disabled={isSubmitting}
-                        className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 rounded-xl shadow-[0_4px_14px_0_rgba(217,119,6,0.39)] hover:shadow-[0_6px_20px_rgba(217,119,6,0.23)] transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
-                    >
-                        {isSubmitting ? (
-                            <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        ) : (
-                            "Gửi đánh giá"
-                        )}
+                        className='bg-amber-200 flex absolute py-1 px-4 rounded-xl
+                        bottom-2 right-4 text-sm font-semibold hover:bg-amber-300
+                        transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
+                        {isSubmitting ? 'Đang gửi...' : 'Gửi'}
                     </button>
+                </div>
+                {err && (
+                    <p className="text-red-500 text-xs px-1 font-semibold">{err}</p>
+                )}
+
+                <div className="flex flex-col border-t-2 border-gray-200 py-3">
+                    {isLoading ? (
+                        <div className="flex items-center justify-center py-4">
+                            <LoaderCircle size={24} className='animate-spin text-amber-500'
+                                strokeWidth={3.5} />
+                        </div>
+                    ) : errReview ? (
+                        <div className="flex flex-col items-center bg-red-300 border-2 border-red-400
+                        rounded-lg p-3 mx-auto">
+                            <CircleX size={24} className='text-red-700 ' />
+                            <p className='font-semibold'>Đã xảy ra lỗi, vui lòng thử lại.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            <div className="flex gap-2 items-center">
+                                <p className='text-lg font-semibold'>Bình luận</p>
+                                <p className="py-0 px-2 rounded-xl bg-amber-200">{response.length}</p>
+                            </div>
+
+                            {response.length === 0 ? (
+                                <div className="flex flex-1 border-2 border-gray-200 rounded-lg
+                                justify-center items-center py-8">
+                                    <p className="">
+                                        Chưa có bình luận nào, hãy thêm bình luận của bạn.</p>
+                                </div>
+                            ) : (
+                                <div className="flex flex-col max-h-[40vh] overflow-y-auto">
+                                    {response.map((item, idx) => {
+                                        return (
+                                            <div key={item.id.customerId || idx} className="grid grid-cols-[1fr_9fr] py-2 px-2 gap-y-2
+                                            grid-rows-2 mb-2">
+                                                <div className='flex'>
+                                                    <img src="/Avatar.png" alt="avatar"
+                                                        className="object-cover w-8 h-8 rounded-full" />
+                                                </div>
+
+                                                <div className="flex flex-col justify-center">
+                                                    <div className="flex items-center gap-3">
+                                                        <p className="font-semibold text-sm">{item.customerName}</p>
+                                                        <span className="text-[10px] text-gray-400">{item.date}</span>
+                                                    </div>
+                                                    <div className="flex gap-0.5 mt-0.5">
+                                                        {[1, 2, 3, 4, 5].map((star) => (
+                                                            <Star
+                                                                key={star}
+                                                                size={11}
+                                                                className={
+                                                                    star <= (item.score || 5)
+                                                                        ? 'fill-amber-400 stroke-amber-500'
+                                                                        : 'stroke-gray-300'
+                                                                }
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div></div>
+
+                                                <div className="flex items-start">
+                                                    <p className='text-stone-700 text-sm'>{item.comment}</p>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
