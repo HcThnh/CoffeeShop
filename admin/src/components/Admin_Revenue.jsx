@@ -55,43 +55,50 @@ const Admin_Revenue = () => {
                         Báo cáo doanh thu</h1>
                 </div>
 
-                <div className="flex justify-between">
-                    <div className="flex flex-col gap-4 flex-1 max-w-xs">
-                        <input 
-                            type="month"
-                            className="w-full px-3 py-2 text-sm text-gray-800 bg-white
-                            border border-gray-300 rounded-lg shadow-sm
-                            hover:border-gray-400
-                            focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20
-                            cursor-pointer transition-all duration-200
-                            [&::-webkit-calendar-picker-indicator]:cursor-pointer 
-                            [&::-webkit-calendar-picker-indicator]:opacity-60 
-                            hover:[&::-webkit-calendar-picker-indicator]:opacity-100"
-                            placeholder="Chọn tháng và năm"
-                            ref={dateRef}
-                            id="date"
-                        />
+                <div className="max-w-md w-full bg-white border border-stone-200 rounded-3xl p-6 shadow-sm">
+                    <h3 className="text-lg font-bold text-stone-850 mb-4">Tính doanh thu theo tháng</h3>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-1.5">
+                            <label htmlFor="date" className="text-xs font-bold text-stone-400 uppercase tracking-wider">Chọn tháng và năm</label>
+                            <input 
+                                type="month"
+                                className="w-full px-4 py-3 text-sm text-stone-850 bg-stone-50/50
+                                border border-stone-200 rounded-xl shadow-inner
+                                hover:border-stone-300
+                                focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20
+                                cursor-pointer transition-all duration-200"
+                                ref={dateRef}
+                                id="date"
+                            />
+                        </div>
 
-                        <button className="bg-emerald-300 rounded-lg py-2 font-semibold
-                        cursor-pointer hover:bg-emerald-400 transition-all duration-200"
+                        <button className="w-full bg-stone-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all text-sm flex items-center justify-center gap-2"
                         onClick={CalIncome}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
                             Tính lợi nhuận
                         </button>
 
                         {isLoading ? (
                             <div className="flex justify-center py-3">
-                                <LoaderCircle className="w-8 h-8 animate-spin text-amber-400"
+                                <LoaderCircle className="w-8 h-8 animate-spin text-amber-500"
                                 strokeWidth={3.5}/>
                             </div>
                         ) : err ? (
-                            <div className="flex flex-col items-center bg-red-300 border-2
-                            border-red-400 rounded-lg py-3">
-                                <CircleX className="w-8 h-8 font-semibold text-red-600"/>
-                                <p className="font-semibold">Đã xảy ra lỗi, vui lòng thử lại.</p>
+                            <div className="flex flex-col items-center bg-red-50 border border-red-100 rounded-xl py-4 px-3 gap-2">
+                                <CircleX className="w-8 h-8 font-semibold text-red-500"/>
+                                <p className="font-bold text-red-600 text-sm">Đã xảy ra lỗi, vui lòng thử lại.</p>
                             </div>
                         ) : ( month &&
-                            <div className="flex items-center font-semibold">
-                                Lợi nhuận tháng {month} là {income} VNĐ.
+                            <div className="flex flex-col items-center justify-center bg-amber-50 border border-amber-100 rounded-xl p-5 text-stone-800 text-center animate-fade-in-up">
+                                <span className="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Kết quả doanh thu</span>
+                                <p className="text-sm font-semibold text-stone-600">
+                                    Lợi nhuận của <span className="text-stone-900 font-bold">Tháng {month}</span> là:
+                                </p>
+                                <p className="text-2xl font-black text-amber-600 mt-1.5">
+                                    {income ? Number(income).toLocaleString('vi-VN') : "0"} <span className="text-sm font-bold">VNĐ</span>
+                                </p>
                             </div>
                         )}
                     </div>

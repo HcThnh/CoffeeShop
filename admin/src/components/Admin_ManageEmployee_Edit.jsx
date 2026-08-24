@@ -17,7 +17,7 @@ const Admin_ManageEmployee_Edit = () => {
         const value = e.target.value;
 
         const input = value.replace(/[^0-9]/g, "");
-        const trimmed = input.substring(0, 10);
+        let trimmed = input.substring(0, 10);
 
         if (phoneEmp.endsWith('.') && !value.includes(phoneEmp)) {
             trimmed = trimmed.slice(0, -1);
@@ -100,60 +100,59 @@ const Admin_ManageEmployee_Edit = () => {
                 <h4 className="font-semibold font-sans text-xl text-stone-700 pb-8">
                     Vui lòng điền thông tin</h4>
 
-                <div className="flex justify-between items-start">
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
                     <form 
-                    className="flex flex-col border border-gray-100
-                    w-3/5 font-sans gap-3">
-                        <div className="flex flex-col py-4 px-2 bg-white rounded-lg">
-                            <p className="font-semibold pb-2">
+                    className="flex flex-col border border-stone-200/60 p-4 rounded-2xl bg-white
+                    w-full lg:w-3/5 font-sans gap-3 shadow-sm">
+                        <div className="flex flex-col pb-2 bg-white rounded-lg">
+                            <p className="font-semibold text-stone-700 pb-2 text-sm">
                                 Số điện thoại</p>
                             <input type="text" 
-                            className="border-gray-300 border rounded-md p-2
-                            text-sm text-gray-800 focus:outline-none focus:border-gray-500"
+                            className="border-stone-200 border rounded-xl p-3
+                            text-sm text-stone-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all bg-stone-50/50"
                             placeholder="Nhập số điện thoại"
                             value={phoneEmp}
                             onChange={handlePhoneChange}/>
                         </div>
 
-                        <div className="flex flex-col py-4 px-2 bg-white rounded-lg">
-                            <p className="font-semibold pb-2">Mật khẩu</p>
+                        <div className="flex flex-col pb-2 bg-white rounded-lg">
+                            <p className="font-semibold text-stone-700 pb-2 text-sm">Mật khẩu</p>
                             <input type="password" 
-                            className="border-gray-300 border rounded-md p-2
-                            text-sm text-gray-800 focus:outline-none focus:border-gray-500"
+                            className="border-stone-200 border rounded-xl p-3
+                            text-sm text-stone-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all bg-stone-50/50"
                             placeholder="Nhập mật khẩu"
                             value={passEmp}
                             onChange={handlePassChange} />
                         </div>
 
-                        <div className="flex flex-col py-4 px-2 bg-white rounded-lg">
-                            <p className="font-semibold pb-2">Vị trí</p>
+                        <div className="flex flex-col pb-2 bg-white rounded-lg">
+                            <p className="font-semibold text-stone-700 pb-2 text-sm">Vị trí</p>
                             <input type="text" 
-                            className="border-gray-300 border rounded-md p-2
-                            text-sm text-gray-800 focus:outline-none focus:border-gray-500"
+                            className="border-stone-200 border rounded-xl p-3
+                            text-sm text-stone-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all bg-stone-50/50"
                             placeholder="Nhập vị trí"
                             value={posEmp}
                             onChange={handlePosChange}/>
                         </div>
 
-                        <div className="flex flex-col py-4 px-2 bg-white rounded-lg">
-                            <p className="font-semibold pb-2">Lương</p>
+                        <div className="flex flex-col pb-2 bg-white rounded-lg">
+                            <p className="font-semibold text-stone-700 pb-2 text-sm">Lương</p>
                             <input type="number" 
-                            className="border-gray-300 border rounded-md p-2
-                            text-sm text-gray-800 focus:outline-none focus:border-gray-500"
+                            className="border-stone-200 border rounded-xl p-3
+                            text-sm text-stone-800 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all bg-stone-50/50"
                             placeholder="Nhập lương"
                             value={salEmp}
                             onChange={handleSalChange}/>
                         </div>
                     </form>
 
-                    <button className="bg-emerald-300 rounded-lg text-stone-800 
-                    flex py-4 px-10 items-center gap-1
-                    hover:bg-emerald-500 hover:text-gray-800 transition-all
-                    duration-200 hover:shadow-lg hover:shadow-emerald-300/30"
+                    <button className="bg-emerald-500 rounded-xl text-white 
+                    flex py-4 px-10 items-center justify-center gap-1.5 w-full lg:w-auto
+                    hover:bg-emerald-600 transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-emerald-500/20"
                     onClick={CreateEmp}>
                         <span className="">
-                            <Check/>
-                        </span>  <p className="font-semibold">Tạo nhân viên</p>
+                            <Check className="w-5 h-5"/>
+                        </span>  <p className="font-bold">Tạo nhân viên</p>
                     </button>
                 </div>
             </main>

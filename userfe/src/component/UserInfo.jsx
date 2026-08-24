@@ -75,7 +75,7 @@ function UserFormInfo({ fetchUserInfo, initialData }) {
     }
 
     return (
-        <form className='bg-white p-8 rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-100 relative overflow-hidden'>
+        <form className='bg-white p-6 sm:p-8 rounded-3xl shadow-xl shadow-stone-200/50 border border-stone-100 relative overflow-hidden'>
             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-5"></div>
             
             <h3 className="text-2xl font-extrabold text-stone-800 mb-6">Chỉnh sửa thông tin</h3>
@@ -184,7 +184,7 @@ function UserPersonalInfo({ toggle, userInfo, fetchError }) {
     }
 
     return (
-        <div className="bg-stone-800 text-stone-100 p-8 rounded-3xl shadow-xl shadow-stone-900/20 relative overflow-hidden flex flex-col h-full">
+        <div className="bg-stone-800 text-stone-100 p-6 sm:p-8 rounded-3xl shadow-xl shadow-stone-900/20 relative overflow-hidden flex flex-col h-full">
             <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-amber-600 rounded-full mix-blend-overlay filter blur-3xl opacity-30"></div>
             
             <div className="flex items-center space-x-5 mb-8">

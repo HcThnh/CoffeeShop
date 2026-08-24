@@ -40,8 +40,8 @@ function UserOrder({ onClose }) {
             <div className="bg-stone-50 rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col relative z-10 animate-fade-in-up font-sans">
                 
                 {/* Header */}
-                <div className="bg-white px-8 py-5 border-b border-stone-100 flex justify-between items-center sticky top-0 z-20 shadow-sm">
-                    <h2 className="text-2xl font-extrabold text-stone-800 flex items-center">
+                <div className="bg-white px-4 sm:px-8 py-4 sm:py-5 border-b border-stone-100 flex justify-between items-center sticky top-0 z-20 shadow-sm">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-stone-800 flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
@@ -58,7 +58,7 @@ function UserOrder({ onClose }) {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
                     {isLoading ? (
                         <div className="flex justify-center items-center py-20">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
@@ -83,7 +83,7 @@ function UserOrder({ onClose }) {
                             {order.map((item, index) => (
                                 <div key={index} className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
                                     {/* Order Summary Header */}
-                                    <div className="bg-stone-50 px-6 py-4 border-b border-stone-200 flex flex-wrap justify-between items-center gap-4">
+                                    <div className="bg-stone-50 px-4 sm:px-6 py-4 border-b border-stone-200 flex flex-wrap justify-between items-center gap-4">
                                         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                                             <div className="bg-white px-3 py-1 rounded-lg border border-stone-200 shadow-sm text-sm inline-flex">
                                                 <span className="text-stone-500 mr-1">Mã ĐH: </span>
@@ -103,7 +103,7 @@ function UserOrder({ onClose }) {
                                     </div>
 
                                     {/* Order Details */}
-                                    <div className="p-6">
+                                    <div className="p-4 sm:p-6">
                                         <div className="mb-5 flex flex-wrap gap-x-8 gap-y-2 pb-4 border-b border-stone-100 border-dashed">
                                             <div className="flex items-center text-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -121,28 +121,28 @@ function UserOrder({ onClose }) {
                                             </div>
                                         </div>
 
-                                        <h4 className="font-bold text-stone-800 mb-3 text-xs uppercase tracking-wider text-stone-500">Chi tiết sản phẩm</h4>
+                                        <h4 className="font-bold mb-3 text-xs uppercase tracking-wider text-stone-500">Chi tiết sản phẩm</h4>
                                         <div className="space-y-3">
                                             {item.producList?.map((prod, prodIndex) => (
                                                 <div key={prodIndex} className="flex justify-between items-center p-3 hover:bg-stone-50 rounded-xl transition-colors border border-transparent hover:border-stone-200 group">
-                                                    <div className="flex items-center space-x-4">
+                                                    <div className="flex items-center space-x-4 min-w-0">
                                                         <div className="w-12 h-12 bg-stone-100 rounded-lg flex items-center justify-center text-lg font-bold text-amber-600 shrink-0 border border-stone-200 group-hover:bg-amber-50 group-hover:border-amber-200 transition-colors">
                                                             x{prod.quantity}
                                                         </div>
-                                                        <div>
-                                                            <p className="font-bold text-stone-800 text-base">{prod.productResponseDto?.name}</p>
-                                                            <p className="text-sm text-stone-500 mt-0.5 line-clamp-1">{prod.productResponseDto?.description}</p>
+                                                        <div className="min-w-0">
+                                                            <p className="font-bold text-stone-800 text-sm sm:text-base truncate">{prod.productResponseDto?.name}</p>
+                                                            <p className="text-xs sm:text-sm text-stone-500 mt-0.5 truncate">{prod.productResponseDto?.description}</p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right shrink-0 ml-4 flex flex-col items-end">
                                                         {prod.productResponseDto?.discount > 0 && (
-                                                            <span className="text-xs text-red-600 bg-red-50 border border-red-100 px-2.5 py-0.5 rounded-full font-bold mb-1">
+                                                            <span className="text-[10px] sm:text-xs text-red-600 bg-red-50 border border-red-100 px-2 sm:px-2.5 py-0.5 rounded-full font-bold mb-1">
                                                                 Giảm {prod.productResponseDto.discount}%
                                                             </span>
                                                         )}
                                                         <div className="flex items-center space-x-1 mt-1">
                                                             <span className="text-amber-500 text-xs">&#9733;</span>
-                                                            <span className="text-xs font-bold text-stone-500">{prod.productResponseDto?.rating || "5.0"}</span>
+                                                            <span className="text-[10px] sm:text-xs font-bold text-stone-500">{prod.productResponseDto?.rating || "5.0"}</span>
                                                         </div>
                                                     </div>
                                                 </div>

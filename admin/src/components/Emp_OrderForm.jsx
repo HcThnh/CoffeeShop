@@ -5,7 +5,7 @@ import axios from "axios";
 
 import traSenVangImage from "../assets/img/tra-sen-vang.svg";
 import { useRef, useMemo } from "react";
-import { LoaderCircle, CircleCheck } from "lucide-react";
+import { LoaderCircle, CircleCheck, X, ShoppingBag } from "lucide-react";
 
 const formatPrice = (price) => {
   return price.toLocaleString("vi-VN") + "đ";
@@ -13,6 +13,7 @@ const formatPrice = (price) => {
 
 const Emp_OrderForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [productName, setProductName] = useState("");
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -210,78 +211,202 @@ const Emp_OrderForm = () => {
           </div>
         )}
 
-        <div className="md:flex flex-col hidden">
-          <div className="py-2 px-3 border border-gray-300 rounded-lg max-h-fit flex flex-col
-          bg-white">
-            <h2 className="m-4 font-semibold ">
-              Đơn hàng</h2>
+        <div className="md:flex flex-col hidden w-80 shrink-0">
+          <div className="py-4 px-5 border border-stone-200 rounded-3xl flex flex-col bg-white shadow-sm">
+            <h2 className="text-xl font-bold text-stone-850 mb-4 pb-2 border-b border-stone-100">
+              Đơn hàng
+            </h2>
             <div>
-              <p className="flex flex-col gap-2">
-                Khách hàng: 
+              <div className="flex flex-col gap-1.5 mb-4">
+                <label htmlFor="phoneNumber" className="text-xs font-bold text-stone-400 uppercase tracking-wider">Số điện thoại khách</label>
                 <input 
                   type="text" 
-                  placeholder="Nhập số điện thoại khách hàng"
-                  className="font-sans mb-4 text-sm text-gray-800 bg-transparent border-0 border-b-2
-                  border-gray-300 rounded-none placeholder:text-gray-400 placeholder:font-normal
-                  focus:outline-none focus:border-amber-500 transition-colors duration-200
-                  py-2 px-1"
+                  placeholder="Nhập số điện thoại"
+                  className="w-full px-3 py-2 text-sm text-stone-850 bg-stone-50 border border-stone-200
+                  rounded-xl placeholder:text-stone-400 placeholder:font-normal focus:outline-none focus:border-amber-500
+                  focus:bg-white transition-all font-medium"
                   id="phoneNumber"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
-              </p>
-              {selectedProducts.map((selectedItem, index) => {
-                const ordItem = ord.find((item) => item.id === selectedItem.productId);
-
-                if (!ordItem) return null;
-
-                return (
-                  <div className="py-1 grid grid-cols-[1fr_1fr_1fr] items-center gap-3" key={index}>
-                    <span className="font-semibold">{ordItem.name}</span>
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => updateQuantity(selectedItem.productId, "decrease")}
-                      className="cursor-pointer p-1 rounded-full hover:bg-stone-300
-                      bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-gray-700
-                      transition-colors select-none"
-                      type="button">-</button>
-                      <span>{selectedItem.quantity}</span>
-                      <button onClick={() => updateQuantity(selectedItem.productId, "increase")}
-                      className="cursor-pointer p-1 rounded-full hover:bg-stone-300
-                      bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-gray-700
-                      transition-colors select-none"
-                      type="button">+</button>
-                    </div>
-                    <span className="flex justify-end">
-                      {formatPrice(ordItem.unit_price * selectedItem.quantity)}</span>
-                  </div>
-                );
-              })}
-
-              <div className="flex justify-center">
-                <button id="confirm-order"
-                className="mt-5 mb-3 py-1 px-3 rounded-lg bg-emerald-300 font-semibold
-                hover:bg-emerald-400 transition-all duration-200"
-                onClick={createOrder}>
-                  Xác nhận
-                </button>
               </div>
+
+              <div className="space-y-3.5 max-h-[300px] overflow-y-auto pr-1">
+                {selectedProducts.map((selectedItem, index) => {
+                  const ordItem = ord.find((item) => item.id === selectedItem.productId);
+                  if (!ordItem) return null;
+
+                  return (
+                    <div className="flex justify-between items-center py-2 border-b border-stone-100 text-sm" key={index}>
+                      <div className="flex flex-col max-w-[120px]">
+                        <span className="font-semibold text-stone-800 truncate">{ordItem.name}</span>
+                        <span className="text-xs text-amber-600 font-bold">{formatPrice(ordItem.unit_price)}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateQuantity(selectedItem.productId, "decrease")}
+                        className="cursor-pointer p-1 rounded-full hover:bg-stone-200 bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-stone-600 focus:outline-none"
+                        type="button">-</button>
+                        <span className="font-bold text-xs text-stone-800 w-4 text-center">{selectedItem.quantity}</span>
+                        <button onClick={() => updateQuantity(selectedItem.productId, "increase")}
+                        className="cursor-pointer p-1 rounded-full hover:bg-stone-200 bg-stone-100 w-6 h-6 flex items-center justify-center font-bold text-stone-600 focus:outline-none"
+                        type="button">+</button>
+                      </div>
+                      <span className="font-bold text-stone-700 text-xs">
+                        {formatPrice(ordItem.unit_price * selectedItem.quantity)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {selectedProducts.length > 0 && (
+                <div className="pt-4 border-t border-stone-100 mt-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-bold text-stone-500">Tổng thanh toán</span>
+                    <span className="text-lg font-black text-amber-600">
+                      {formatPrice(selectedProducts.reduce((sum, item) => {
+                        const prodItem = ord.find((p) => p.id === item.productId);
+                        return sum + (prodItem ? prodItem.unit_price * item.quantity : 0);
+                      }, 0))}
+                    </span>
+                  </div>
+                  <button id="confirm-order"
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl shadow-md hover:shadow-lg transition-all focus:outline-none text-sm"
+                  onClick={createOrder}>
+                    Xác nhận
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
           {err && (
-            <div className="mt-4 p-3 border-2 border-red-200 bg-red-50 rounded-lg">
-              <p className="text-red-600 font-semibold">Không thể tạo đơn hàng</p>
-              <p className="text-red-500">Kiểm tra lại số điện thoại khách hàng</p>
+            <div className="mt-4 p-3 border border-red-100 bg-red-50 rounded-2xl flex items-start gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <p className="text-red-700 font-bold text-xs">Không thể tạo đơn hàng</p>
+                <p className="text-red-500 text-[11px] mt-0.5">Kiểm tra lại số điện thoại khách hàng</p>
+              </div>
             </div>
           )}
         </div>
       </main>
 
-      {success && <div className="absolute z-10 top-[80px] left-1/2 -translate-x-1/2 flex
-      bg-emerald-300 py-3 px-6 rounded-lg items-center gap-2">
-        <CircleCheck className="w-8 h-8 text-emerald-700 " />  
-        <p className="font-semibold">Tạo đơn hàng thành công</p>
-      </div>}
+      {/* Mobile Floating Action Cart Bar */}
+      {selectedProducts.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 md:hidden w-[90%] max-w-sm">
+          <button 
+            onClick={() => setIsCartOpen(true)}
+            className="w-full bg-amber-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-xl flex items-center justify-between hover:bg-amber-700 transition-all focus:outline-none animate-fade-in-up"
+          >
+            <div className="flex items-center gap-2">
+              <span className="bg-white text-amber-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shadow-sm">
+                {selectedProducts.reduce((sum, item) => sum + item.quantity, 0)}
+              </span>
+              <span>Xem đơn hàng</span>
+            </div>
+            <span className="font-black">
+              {formatPrice(selectedProducts.reduce((sum, item) => {
+                const prodItem = ord.find((p) => p.id === item.productId);
+                return sum + (prodItem ? prodItem.unit_price * item.quantity : 0);
+              }, 0))}
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* Mobile Cart Drawer Overlay */}
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 md:hidden bg-black/60 backdrop-blur-sm flex flex-col justify-end">
+          <div className="flex-1" onClick={() => setIsCartOpen(false)}></div>
+          <div className="bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto p-6 shadow-2xl border-t border-stone-100 flex flex-col transition-transform duration-300 transform translate-y-0">
+            <div className="flex justify-between items-center mb-6 pb-2 border-b border-stone-100">
+              <h3 className="text-lg font-bold text-stone-850">Chi tiết đơn hàng</h3>
+              <button 
+                onClick={() => setIsCartOpen(false)}
+                className="p-1.5 rounded-xl bg-stone-50 text-stone-400 hover:bg-stone-100 hover:text-stone-600 transition-all focus:outline-none shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="space-y-4 overflow-y-auto max-h-[40vh] pr-1">
+              <div className="flex flex-col gap-1.5 mb-2">
+                <label htmlFor="phoneNumberMobile" className="text-xs font-bold text-stone-400 uppercase tracking-wider">Số điện thoại khách hàng</label>
+                <input 
+                  type="text" 
+                  placeholder="Nhập số điện thoại"
+                  className="w-full px-4 py-3 text-sm text-stone-850 bg-stone-50 border border-stone-200
+                  rounded-xl placeholder:text-stone-400 placeholder:font-normal focus:outline-none focus:border-amber-500
+                  focus:bg-white transition-all font-medium"
+                  id="phoneNumberMobile"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </div>
+              
+              <div className="space-y-3.5">
+                {selectedProducts.map((selectedItem, index) => {
+                  const ordItem = ord.find((item) => item.id === selectedItem.productId);
+                  if (!ordItem) return null;
+
+                  return (
+                    <div className="flex justify-between items-center py-2 border-b border-stone-100 text-sm" key={index}>
+                      <div className="flex flex-col max-w-[150px]">
+                        <span className="font-semibold text-stone-800 truncate">{ordItem.name}</span>
+                        <span className="text-xs text-amber-600 font-bold">{formatPrice(ordItem.unit_price)}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateQuantity(selectedItem.productId, "decrease")}
+                        className="cursor-pointer p-1 rounded-full hover:bg-stone-200 bg-stone-100 w-7 h-7 flex items-center justify-center font-bold text-stone-600 focus:outline-none"
+                        type="button">-</button>
+                        <span className="font-bold text-stone-850 text-sm w-4 text-center">{selectedItem.quantity}</span>
+                        <button onClick={() => updateQuantity(selectedItem.productId, "increase")}
+                        className="cursor-pointer p-1 rounded-full hover:bg-stone-200 bg-stone-100 w-7 h-7 flex items-center justify-center font-bold text-stone-600 focus:outline-none"
+                        type="button">+</button>
+                      </div>
+                      <span className="font-bold text-stone-700 text-xs">
+                        {formatPrice(ordItem.unit_price * selectedItem.quantity)}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            
+            <div className="pt-6 border-t border-stone-100 mt-6 space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-stone-500 text-sm">Tổng thanh toán</span>
+                <span className="text-xl font-black text-amber-600">
+                  {formatPrice(selectedProducts.reduce((sum, item) => {
+                    const prodItem = ord.find((p) => p.id === item.productId);
+                    return sum + (prodItem ? prodItem.unit_price * item.quantity : 0);
+                  }, 0))}
+                </span>
+              </div>
+              
+              <button 
+                onClick={(e) => {
+                  createOrder(e);
+                  setIsCartOpen(false);
+                }}
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all focus:outline-none"
+              >
+                Xác nhận đơn hàng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div className="fixed z-50 top-20 left-1/2 -translate-x-1/2 flex bg-emerald-500 text-white py-3.5 px-6 rounded-2xl shadow-xl items-center gap-2 border border-emerald-400/20 animate-fade-in-up font-bold text-sm">
+          <CircleCheck className="w-5 h-5 text-white" />  
+          <span>Tạo đơn hàng thành công!</span>
+        </div>
+      )}
     </div>
   );
 };

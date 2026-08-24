@@ -183,7 +183,7 @@ function UserGiftExchange() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col py-2 max-h-[80vh]">
+                    <div className="flex flex-col py-2 lg:max-h-[80vh]">
                         <h2 className="text-2xl font-black text-stone-800 pb-3 border-b-2 border-stone-200/80 mb-6 flex justify-between items-center">
                             <span>Bộ sưu tập quà tặng</span>
                             <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">
@@ -191,7 +191,7 @@ function UserGiftExchange() {
                             </span>
                         </h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto pr-2 pb-6 scrollbar-thin">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:overflow-y-auto pr-2 pb-6 scrollbar-thin">
                             {gift.map(item => (
                                 <div 
                                     key={item.id}
@@ -249,7 +249,7 @@ function UserGiftExchange() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                        <div className="flex-1 overflow-y-auto p-8">
+                        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
                             <UserGiftHistory />
                         </div>
                     </div>

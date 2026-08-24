@@ -89,42 +89,41 @@ function UserFeedBack({ onClose, product }) {
 
 
     return (
-        <div className="min-h-screen fixed top-0 left-0 right-0 bg-gray-400/40 z-20
-        flex justify-end">
-            <div className="w-2/5 bg-white min-h-screen px-6 py-4 flex flex-col gap-4
-            animate-slide-in-right">
-                <div className="flex justify-end w-full">
-                    <X size={32} className='p-1 rounded-full hover:bg-amber-100
-                    hover:text-amber-500 transition-colors duration-200 cursor-pointer'
+        <div className="min-h-screen fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 flex justify-end">
+            <div className="absolute inset-0" onClick={onClose}></div>
+            <div className="relative w-full sm:w-[500px] md:w-[600px] lg:w-[500px] xl:w-[600px] bg-white h-screen px-4 sm:px-6 py-6 flex flex-col gap-4 shadow-2xl overflow-y-auto animate-slide-in-right z-10 font-sans">
+                <div className="flex justify-between items-center w-full pb-2 border-b border-gray-100">
+                    <h3 className="text-xl font-extrabold text-stone-850">Đánh giá sản phẩm</h3>
+                    <X size={32} className='p-1.5 rounded-full hover:bg-red-50 hover:text-red-500 text-stone-500 transition-colors duration-200 cursor-pointer'
                         onClick={onClose} />
                 </div>
 
-                <div className="grid grid-cols-[1fr_4fr] py-4 px-4 gap-4 border-2 border-gray-100 rounded-xl">
-                    <div className='overflow-hidden'>
+                <div className="flex items-center gap-4 py-4 px-4 border-2 border-gray-100 rounded-2xl bg-stone-50/50">
+                    <div className='w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-gray-200'>
                         <img src="/coffee.jpg" alt="sample-image"
-                            className="object-cover" />
+                            className="w-full h-full object-cover" />
                     </div>
 
-                    <div className="flex flex-col justify-start">
-                        <div className="flex items-center justify-between">
-                            <p className="font-medium text-lg">{product.name}</p>
-                            <div className="flex items-center gap-1 bg-amber-100 py-1 px-4 rounded-lg">
+                    <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                            <p className="font-bold text-stone-800 text-base truncate">{product.name}</p>
+                            <div className="flex items-center gap-1 bg-amber-100 py-0.5 px-2.5 rounded-lg shrink-0 text-amber-700 font-extrabold text-sm">
                                 <p className="font-medium">{avg}</p>
-                                <Star size={16} className="fill-yellow-500 stroke-yellow-500" />
+                                <Star size={12} className="fill-yellow-500 stroke-yellow-500" />
                             </div>
                         </div>
 
-                        <p className="text-lg font-semibold">{product.unit_price.toLocaleString("vi-VN")} VNĐ</p>
+                        <p className="text-base font-extrabold text-amber-600 mt-1">{product.unit_price.toLocaleString("vi-VN")} VNĐ</p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2 px-1">
-                    <p className="text-sm font-semibold text-stone-700">Đánh giá của bạn:</p>
+                    <p className="text-sm font-bold text-stone-700">Đánh giá của bạn:</p>
                     <div className="flex gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <Star
                                 key={star}
-                                size={22}
+                                size={24}
                                 className={`cursor-pointer transition-all duration-150 transform hover:scale-110 ${star <= selectedRating
                                         ? 'fill-amber-400 stroke-amber-500'
                                         : 'stroke-gray-300 hover:stroke-amber-400'
@@ -140,75 +139,72 @@ function UserFeedBack({ onClose, product }) {
                         id="comment"
                         rows={3}
                         maxLength={100}
-                        placeholder="Thêm bình luận"
-                        className="w-full px-4 pt-3 pb-8 rounded-xl bg-stone-100 focus:outline-none 
-                        text-sm text-stone-800"
+                        placeholder="Chia sẻ cảm nghĩ của bạn về món đồ uống này..."
+                        className="w-full px-4 pt-3 pb-12 rounded-xl bg-stone-100 focus:bg-stone-50 focus:ring-2 focus:ring-amber-500/20 focus:outline-none transition-all text-sm text-stone-800 border border-transparent focus:border-amber-500"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
 
-                    <p className="text-xs text-gray-500 absolute bottom-3 left-4">
-                        Số ký tự còn lại {100 - text.length}</p>
+                    <div className="flex justify-between items-center absolute bottom-2 left-4 right-4">
+                        <p className="text-[10px] font-bold text-stone-400">
+                            Còn lại {100 - text.length} ký tự
+                        </p>
 
-                    <button
-                        onClick={SendFeedBack}
-                        disabled={isSubmitting}
-                        className='bg-amber-200 flex absolute py-1 px-4 rounded-xl
-                        bottom-2 right-4 text-sm font-semibold hover:bg-amber-300
-                        transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed'>
-                        {isSubmitting ? 'Đang gửi...' : 'Gửi'}
-                    </button>
+                        <button
+                            onClick={SendFeedBack}
+                            disabled={isSubmitting}
+                            className='bg-amber-600 text-white py-1.5 px-4 rounded-lg text-xs font-bold hover:bg-amber-700 shadow-sm hover:shadow transition-all disabled:opacity-50 disabled:cursor-not-allowed'>
+                            {isSubmitting ? 'Đang gửi...' : 'Gửi'}
+                        </button>
+                    </div>
                 </div>
                 {err && (
                     <p className="text-red-500 text-xs px-1 font-semibold">{err}</p>
                 )}
 
-                <div className="flex flex-col border-t-2 border-gray-200 py-3">
+                <div className="flex flex-col border-t border-gray-200 py-4 flex-1 min-h-0">
                     {isLoading ? (
-                        <div className="flex items-center justify-center py-4">
-                            <LoaderCircle size={24} className='animate-spin text-amber-500'
+                        <div className="flex items-center justify-center py-8">
+                            <LoaderCircle size={32} className='animate-spin text-amber-500'
                                 strokeWidth={3.5} />
                         </div>
                     ) : errReview ? (
-                        <div className="flex flex-col items-center bg-red-300 border-2 border-red-400
-                        rounded-lg p-3 mx-auto">
-                            <CircleX size={24} className='text-red-700 ' />
-                            <p className='font-semibold'>Đã xảy ra lỗi, vui lòng thử lại.</p>
+                        <div className="flex flex-col items-center bg-red-50 border border-red-200
+                        rounded-xl p-4 text-center">
+                            <CircleX size={28} className='text-red-600 mb-2' />
+                            <p className='font-bold text-red-700 text-sm'>Đã xảy ra lỗi khi tải bình luận.</p>
+                            <p className='text-xs text-red-500 mt-1'>Vui lòng thử lại sau.</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-3">
-                            <div className="flex gap-2 items-center">
-                                <p className='text-lg font-semibold'>Bình luận</p>
-                                <p className="py-0 px-2 rounded-xl bg-amber-200">{response.length}</p>
+                        <div className="flex flex-col gap-3 h-full min-h-0">
+                            <div className="flex gap-2 items-center mb-1">
+                                <p className='text-lg font-extrabold text-stone-800'>Bình luận</p>
+                                <p className="py-0.5 px-2.5 rounded-full bg-amber-100 text-amber-800 font-bold text-xs">{response.length}</p>
                             </div>
 
                             {response.length === 0 ? (
-                                <div className="flex flex-1 border-2 border-gray-200 rounded-lg
-                                justify-center items-center py-8">
-                                    <p className="">
-                                        Chưa có bình luận nào, hãy thêm bình luận của bạn.</p>
+                                <div className="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-stone-200 rounded-2xl bg-stone-50/30">
+                                    <p className="text-stone-400 italic text-sm text-center">
+                                        Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ cảm nhận!
+                                    </p>
                                 </div>
                             ) : (
-                                <div className="flex flex-col max-h-[40vh] overflow-y-auto">
+                                <div className="flex-1 overflow-y-auto pr-1 space-y-4 divide-y divide-stone-100">
                                     {response.map((item, idx) => {
                                         return (
-                                            <div key={item.id.customerId || idx} className="grid grid-cols-[1fr_9fr] py-2 px-2 gap-y-2
-                                            grid-rows-2 mb-2">
-                                                <div className='flex'>
-                                                    <img src="/Avatar.png" alt="avatar"
-                                                        className="object-cover w-8 h-8 rounded-full" />
-                                                </div>
-
-                                                <div className="flex flex-col justify-center">
-                                                    <div className="flex items-center gap-3">
-                                                        <p className="font-semibold text-sm">{item.customerName}</p>
-                                                        <span className="text-[10px] text-gray-400">{item.date}</span>
+                                            <div key={item.id?.customerId || idx} className="flex gap-3 pt-4 first:pt-0">
+                                                <img src="/Avatar.png" alt="avatar"
+                                                    className="object-cover w-8 h-8 rounded-full border border-stone-200 shrink-0" />
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="font-bold text-stone-800 text-sm truncate">{item.customerName}</p>
+                                                        <span className="text-[10px] text-stone-400 font-medium">{item.date}</span>
                                                     </div>
                                                     <div className="flex gap-0.5 mt-0.5">
                                                         {[1, 2, 3, 4, 5].map((star) => (
                                                             <Star
                                                                 key={star}
-                                                                size={11}
+                                                                size={10}
                                                                 className={
                                                                     star <= (item.score || 5)
                                                                         ? 'fill-amber-400 stroke-amber-500'
@@ -217,12 +213,7 @@ function UserFeedBack({ onClose, product }) {
                                                             />
                                                         ))}
                                                     </div>
-                                                </div>
-
-                                                <div></div>
-
-                                                <div className="flex items-start">
-                                                    <p className='text-stone-700 text-sm'>{item.comment}</p>
+                                                    <p className='text-stone-600 text-sm mt-2 leading-relaxed whitespace-pre-wrap break-words'>{item.comment}</p>
                                                 </div>
                                             </div>
                                         )

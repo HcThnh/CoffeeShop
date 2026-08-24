@@ -68,7 +68,7 @@ function UserGiftHistory() {
                                 </span>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4 text-sm pl-3 bg-stone-50 p-3 rounded-xl border border-stone-100">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm pl-3 bg-stone-50 p-3 rounded-xl border border-stone-100">
                                 <div>
                                     <p className="text-stone-500 mb-1 flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

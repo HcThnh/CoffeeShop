@@ -60,26 +60,26 @@ function UserProduct() {
                     </div>
                 ) : (
                     <div className="w-full">
-                        <div className="max-w-7xl mx-auto xl:px-8 pt-8">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
                             <div className="flex flex-col gap-2">
-                                <div className="grid grid-cols-[2fr_3fr] mb-12">
-                                    <div className="space-y-6">
-                                        <div className="inline-flex items-center space-x-2 bg-amber-50 text-amber-700 px-4 py-2 rounded-full font-bold text-sm">
+                                <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 mb-12 items-center">
+                                    <div className="space-y-4 md:space-y-6">
+                                        <div className="inline-flex items-center space-x-2 bg-amber-50 text-amber-700 px-4 py-2 rounded-full font-bold text-sm w-fit">
                                             <span className="relative flex h-3 w-3">
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
                                             </span>
                                             <span>Bộ sưu tập đặc biệt</span>
                                         </div>
-                                        <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+                                        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                                             Tinh Hoa <span className="text-amber-600">Cà Phê</span>
                                         </h1>
-                                        <p className="text-lg text-gray-600 leading-relaxed">
+                                        <p className="text-base md:text-lg text-gray-600 leading-relaxed">
                                             Khám phá bộ sưu tập cà phê tinh tế của chúng tôi, nơi tôn vinh hương vị đậm đà và nghệ thuật pha chế. Mỗi sản phẩm đều là minh chứng cho chất lượng, phong cách, và sự quyến rũ vượt thời gian.
                                         </p>
                                     </div>
 
-                                    <div className="xl:flex hidden justify-end py-16 pl-16">
+                                    <div className="lg:flex hidden justify-end py-8 lg:py-16 pl-0 lg:pl-16">
                                         <img 
                                         src="https://image.pollinations.ai/prompt/A%20professional%20specialty%20coffee%20bar%20counter%20interior%2C%20industrial%20loft%20style%20with%20red%20and%20white%20brick%20walls%2C%20stainless%20steel%20espresso%20equipment%2C%20commercial%20coffee%20grinder%2C%20glass%20pendant%20lights%2C%20pour%20over%20v60%20dripper%20set%2C%20warm%20ambient%20lighting%2C%20cinematic%20photography%2C%20high%20resolution?width=1280&height=720&seed=42&nologo=true" 
                                         alt="Góc quầy pha chế"
@@ -98,9 +98,9 @@ function UserProduct() {
                                     bg-amber-500 rounded-full"></div>
                                     </div>
 
-                                    <p className="text-lg text-gray-500">Khám phá các loại đồ uống tại cửa hàng</p>
+                                    <p className="text-base md:text-lg text-gray-500 text-center">Khám phá các loại đồ uống tại cửa hàng</p>
 
-                                    <div className="xl:grid xl:grid-cols-4 gap-6 w-full mt-8">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full mt-8">
                                         {product.map((item) => {
                                             return (
                                                 <button key={item.id}
@@ -121,7 +121,7 @@ function UserProduct() {
                                                     <div className="flex flex-col px-3">
                                                         <div className="flex justify-between items-end">
                                                             <p className="text-stone-500 text-lg font-semibold truncate flex-1
-                                                        group-hover:text-amber-600 transition-colors text-left">
+                                                        group-hover:text-amber-600 transition-colors text-left font-sans">
                                                                 {item.name}</p>
                                                             <p className="font-medium text-xl flex gap-3">
                                                                 <span className='flex items-center'>
@@ -131,14 +131,14 @@ function UserProduct() {
                                                         </div>
 
                                                         {item.discount === 0 ? (
-                                                            <p className="text-lg font-bold text-stone-800 text-left">
+                                                            <p className="text-lg font-bold text-stone-800 text-left font-sans">
                                                                 {item.unit_price.toLocaleString("vi-VN")} VNĐ</p>
                                                         ) : (
                                                             <div className="flex items-center gap-6">
-                                                                <p className="text-lg font-bold text-stone-800">
+                                                                <p className="text-lg font-bold text-stone-800 font-sans">
                                                                     {(item.unit_price - item.discount).toLocaleString("vi-VN")} VNĐ</p>
 
-                                                                <p className="text-xs font-medium text-gray-600 line-through">
+                                                                <p className="text-xs font-medium text-gray-600 line-through font-sans">
                                                                     {item.unit_price.toLocaleString("vi-VN")} VNĐ
                                                                 </p>
                                                             </div>

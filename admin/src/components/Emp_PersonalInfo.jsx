@@ -125,22 +125,22 @@ const Emp_PersonalInfo = () => {
               </p>
               <p>Quản lý thông tin cá nhân chi tiết bao gồm tên, ngày sinh, giới tính, số điện thoại và địa chỉ</p>
 
-              <div className="grid grid-cols-2 mt-4 gap-x-8 gap-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 mt-6 gap-x-8 gap-y-6">
                 <div>
-                  <p className="pb-1">Họ và tên</p>
-                  <div className="flex flex-1 justify-between gap-4 items-center">
+                  <p className="pb-1.5 text-sm font-bold text-stone-700">Họ và tên</p>
+                  <div className="flex flex-1 justify-between gap-3 items-center">
                     <input type="text"
-                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
-                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    className="flex-1 border border-stone-200 px-3 rounded-xl text-sm py-2.5
+                    focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/30 disabled:bg-stone-100/50 disabled:text-stone-500 transition-all font-medium"
                     id="personalName"
-                    value={info.name}
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={isEditing !== "change-name"}/>
 
                     <button
                     type="button"
-                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
-                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    className="w-10 h-10 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700
+                    transition-all duration-200 rounded-xl flex items-center justify-center border border-amber-200/50 focus:outline-none shrink-0"
                     onClick={() => handleButtonEdit("change-name")}>
                       <SquarePen className="w-5 h-5"/>
                     </button>
@@ -148,42 +148,41 @@ const Emp_PersonalInfo = () => {
                 </div>
 
                 <div>
-                  <p className="pb-1">Ngày sinh</p>
-                  <div className="flex flex-1 justify-between gap-4 items-center">
+                  <p className="pb-1.5 text-sm font-bold text-stone-700">Ngày sinh</p>
+                  <div className="flex flex-1 justify-between gap-3 items-center">
                     <input type="date"
-                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
-                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    className="flex-1 border border-stone-200 px-3 rounded-xl text-sm py-2.5
+                    focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/30 disabled:bg-stone-100/50 disabled:text-stone-500 transition-all font-medium"
                     id="personalDob"
-                    value={info.dob}
+                    value={dob}
                     onChange={(e) => setDob(e.target.value)}
                     disabled={isEditing !== "change-dob"}/>
 
                     <button
                     type="button"
-                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
-                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    className="w-10 h-10 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700
+                    transition-all duration-200 rounded-xl flex items-center justify-center border border-amber-200/50 focus:outline-none shrink-0"
                     onClick={() => handleButtonEdit("change-dob")}>
                       <SquarePen className="w-5 h-5"/>
                     </button>
                   </div>
                 </div>
 
-
                 <div>
-                  <p className="pb-1">Số điện thoại</p>
-                  <div className="flex flex-1 justify-between gap-4 items-center">
+                  <p className="pb-1.5 text-sm font-bold text-stone-700">Số điện thoại</p>
+                  <div className="flex flex-1 justify-between gap-3 items-center">
                     <input type="text" 
-                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
-                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    className="flex-1 border border-stone-200 px-3 rounded-xl text-sm py-2.5
+                    focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/30 disabled:bg-stone-100/50 disabled:text-stone-500 transition-all font-medium"
                     id="personalPhone"
-                    value={info.phoneNumber}
+                    value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     disabled={isEditing !== "change-phone"}/>
 
                     <button
                     type="button"
-                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
-                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    className="w-10 h-10 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700
+                    transition-all duration-200 rounded-xl flex items-center justify-center border border-amber-200/50 focus:outline-none shrink-0"
                     onClick={() => handleButtonEdit("change-phone")}>
                       <SquarePen className="w-5 h-5"/>
                     </button>
@@ -191,20 +190,20 @@ const Emp_PersonalInfo = () => {
                 </div>
 
                 <div>
-                  <p className="pb-1">Địa chỉ</p>
-                  <div className="flex flex-1 justify-between gap-4 items-center">
+                  <p className="pb-1.5 text-sm font-bold text-stone-700">Địa chỉ</p>
+                  <div className="flex flex-1 justify-between gap-3 items-center">
                     <input type="text"
-                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
-                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    className="flex-1 border border-stone-200 px-3 rounded-xl text-sm py-2.5
+                    focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/30 disabled:bg-stone-100/50 disabled:text-stone-500 transition-all font-medium"
                     id="personalAddress"
-                    value={info.address}
+                    value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     disabled={isEditing !== "change-address"} />
 
                     <button
                     type="button"
-                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
-                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    className="w-10 h-10 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700
+                    transition-all duration-200 rounded-xl flex items-center justify-center border border-amber-200/50 focus:outline-none shrink-0"
                     onClick={() => handleButtonEdit("change-address")}>
                       <SquarePen className="w-5 h-5"/>
                     </button>
@@ -212,13 +211,13 @@ const Emp_PersonalInfo = () => {
                 </div>
 
                 <div>
-                  <p className="pb-1">Giới tính</p>
-                  <div className="flex flex-1 justify-between gap-4 items-center">
+                  <p className="pb-1.5 text-sm font-bold text-stone-700">Giới tính</p>
+                  <div className="flex flex-1 justify-between gap-3 items-center">
                     <select
-                    className="flex-1 border-2 border-gray-100 px-2 rounded-sm text-sm py-2
-                    focus:outline-none focus:ring-1 focus:ring-amber-300"
+                    className="flex-1 border border-stone-200 px-3 rounded-xl text-sm py-2.5
+                    focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 bg-stone-50/30 disabled:bg-stone-100/50 disabled:text-stone-500 transition-all font-medium cursor-pointer"
                     id="personalGender"
-                    value={info.gender}
+                    value={gender}
                     onChange={(e) => setGender(e.target.value)}
                     disabled={isEditing !== "change-gender"}>
                       <option value="M">Nam</option>
@@ -227,19 +226,18 @@ const Emp_PersonalInfo = () => {
 
                     <button
                     type="button"
-                    className="w-6 h-6 bg-amber-100 text-amber-700 hover:bg-amber-200
-                    transition-colors duration-200 rounded-sm flex items-center justify-center"
+                    className="w-10 h-10 bg-amber-50 text-amber-600 hover:bg-amber-100 hover:text-amber-700
+                    transition-all duration-200 rounded-xl flex items-center justify-center border border-amber-200/50 focus:outline-none shrink-0"
                     onClick={() => handleButtonEdit("change-gender")}>
                       <SquarePen className="w-5 h-5"/>
                     </button>
                   </div>  
                 </div>
 
-                <div className="flex items-end justify-end">
-                  <button className="py-1 px-8 bg-emerald-300 rounded-lg font-semibold
-                  hover:bg-emerald-400 hover:text-stone-900 transition-colors duration-200"
+                <div className="md:col-span-2 flex justify-end mt-4">
+                  <button className="w-full sm:w-auto py-2.5 px-8 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold transition-all duration-200 shadow-md hover:shadow-lg hover:shadow-emerald-500/20 focus:outline-none"
                   onClick={() => updateEmp()}>
-                    Lưu
+                    Lưu thay đổi
                   </button>
                 </div>
               </div>

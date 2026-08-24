@@ -5,7 +5,7 @@ import "../assets/css/Admin_ManageEmployee.css";
 import axios from 'axios';
 import {
     Phone, User, Info, Search, UserPen, Loader2, Trash,
-    Check, X, Plus
+    Check, X, Plus, ArrowLeft
 } from 'lucide-react';
 import DeleteEmployeeModal from './Admin_DeleteEmployeeModal';
 
@@ -146,7 +146,7 @@ const Admin_ManageEmployee = () => {
                 </div>
 
                 <div className="md:grid md:grid-cols-5 gap-3">
-                    <div className="md:col-span-2 border-r pr-3">
+                    <div className={`md:col-span-2 border-r pr-3 ${selectedEmp ? 'hidden md:block' : 'block'}`}>
                         {isLoading ?
                             (
                                 <div className="flex items-center justify-center p-4 min-h-[calc(100vh-250px)]">
@@ -156,25 +156,29 @@ const Admin_ManageEmployee = () => {
                                 </div>) :
                             (<ul className="gap-4 flex flex-col min-h-[calc(100vh-250px)] overflow-y-auto">
                                 {emp.map((employee, idx) => (
-                                    <li className={`flex justify-between p-2 rounded-xl
-                                border-y-2 border-r-2 border-l-8 bg-gray-100
-                                ${hoveredBtnIdx === idx ? 'border-amber-500 transition-all shadow-lg border-l-amber-400'
+                                    <li className={`flex justify-between items-center p-3 rounded-xl cursor-pointer
+                                border-y-2 border-r-2 border-l-8 bg-gray-100 transition-all duration-200
+                                ${hoveredBtnIdx === idx ? 'border-amber-500 shadow-md border-l-amber-400'
                                             : ''}
-                                ${selectedEmp?.id === employee.id ? 'border-amber-500 border-l-amber-500' : ''}`}
-                                        key={idx}>
+                                ${selectedEmp?.id === employee.id ? 'border-amber-500 border-l-amber-500 bg-amber-50/30' : ''}`}
+                                        key={idx}
+                                        onClick={() => handleDetailEmployee(employee.id)}>
                                         <div className="font-sans">
-                                            <p className="flex items-center gap-2">
+                                            <p className="flex items-center gap-2 text-stone-700 font-semibold text-sm">
                                                 <span>
-                                                    <Phone className='size-4' /></span>
+                                                    <Phone className='size-4 text-stone-400' /></span>
                                                 {employee.phoneNumber}</p>
                                         </div>
 
                                         <button className={`cursor-pointer hover:text-amber-600
-                                    ${selectedEmp?.id === employee.id ? "text-amber-500" : ""}`}
+                                    ${selectedEmp?.id === employee.id ? "text-amber-500" : "text-stone-400"}`}
                                             onMouseEnter={() => setHoveredBtnIdx(idx)}
                                             onMouseLeave={() => setHoveredBtnIdx(null)}
-                                            onClick={() => handleDetailEmployee(employee.id)}>
-                                            <Info />
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDetailEmployee(employee.id);
+                                            }}>
+                                            <Info className="w-5 h-5" />
                                         </button>
                                     </li>
                                 ))}
@@ -182,15 +186,26 @@ const Admin_ManageEmployee = () => {
                     </div>
 
                     {!selectedEmp ? (
-                        <div className="md:col-span-3 border-2 rounded-xl flex border-dashed
-                    border-stone-300 items-center justify-center">
+                        <div className="hidden md:flex md:col-span-3 border-2 rounded-xl flex border-dashed
+                    border-stone-300 items-center justify-center min-h-[300px]">
                             <div className="flex gap-2">
                                 <Search className="text-gray-500" />
                                 <p className="text-gray-500">
                                     Chọn một nhân viên để xem chi tiết</p>
                             </div>
                         </div>) : (
-                        <div className="md:col-span-3 border-2 rounded-2xl flex flex-col border-stone-200 bg-white shadow-sm overflow-hidden">
+                        <div className={`md:col-span-3 border-2 rounded-2xl flex flex-col border-stone-200 bg-white shadow-sm overflow-hidden ${selectedEmp ? 'block' : 'hidden md:block'}`}>
+                            
+                            {/* Back button for mobile/tablet */}
+                            <div className="md:hidden border-b border-stone-100 bg-stone-50 px-4 py-3 flex items-center">
+                                <button 
+                                    onClick={() => setSelectedEmp(null)}
+                                    className="flex items-center gap-1.5 text-stone-600 hover:text-amber-600 font-bold text-sm transition-colors focus:outline-none"
+                                >
+                                    <ArrowLeft className="w-4 h-4"/> Quay lại danh sách
+                                </button>
+                            </div>
+
                             <div className="h-10 bg-gradient-to-r from-stone-900 to-stone-850 relative">
                                 <div className="absolute -bottom-6 left-6">
                                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-amber-600 border-4 border-white shadow-md flex items-center justify-center text-white text-2xl font-black">
@@ -263,10 +278,10 @@ const Admin_ManageEmployee = () => {
                                                 {toggleEdit ? (
                                                     <input
                                                         className="w-full max-w-xs text-xl font-bold text-amber-950 bg-white/70 backdrop-blur-sm
-                                                    px-3 py-1 rounded-xl border border-amber-200/60 shadow-inner
-                                                    placeholder:text-amber-700/40 placeholder:font-normal placeholder:text-sm
-                                                    focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 
-                                                    focus:bg-white transition-all duration-200"
+                                                     px-3 py-1 rounded-xl border border-amber-200/60 shadow-inner
+                                                     placeholder:text-amber-700/40 placeholder:font-normal placeholder:text-sm
+                                                     focus:outline-none focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 
+                                                     focus:bg-white transition-all duration-200"
                                                         type="number"
                                                         placeholder="Lương/giờ..."
                                                         value={editedSalary}
@@ -288,24 +303,24 @@ const Admin_ManageEmployee = () => {
                                                 setEditedSalary(selectedEmp.unitSalary !== undefined ? selectedEmp.unitSalary : "");
                                             }}>
                                             <span className='p-2 rounded-full bg-amber-500/10 hover:bg-amber-500
-                                            transition-all duration-200 hover:text-amber-700'><UserPen /></span>
+                                             transition-all duration-200 hover:text-amber-700'><UserPen /></span>
                                         </button> :
                                             <div className="flex items-center gap-4">
                                                 <button className="flex items-center"
                                                     onClick={() => setToggleEdit(false)}>
                                                     <span className='p-2 rounded-full bg-amber-500/10 hover:bg-red-200
-                                                transition-all duration-200 hover:text-red-400'><X /></span>
+                                                 transition-all duration-200 hover:text-red-400'><X /></span>
                                                 </button>
                                                 <button className="flex items-center">
                                                     <span className="p-2 rounded-full bg-emerald-500/10 hover:bg-emerald-300
-                                                transition-all duration-200 hover:text-emerald-600"
+                                                 transition-all duration-200 hover:text-emerald-600"
                                                         onClick={() => handleEditButton(selectedEmp.id)}>
                                                         <Check /></span>
                                                 </button>
                                             </div>}
                                         <button className="flex items-center">
                                             <span className="p-2 rounded-full bg-amber-500/10 hover:bg-red-200
-                                            transition all duration-200 hover:text-red-400"
+                                              transition all duration-200 hover:text-red-400"
                                             onClick={() => setIsOpenDeleteModal(true)}>
                                                 <Trash /></span>
                                         </button>
