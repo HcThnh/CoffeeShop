@@ -1,14 +1,17 @@
 package com.example.database.Relationship;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Repository.productRepo;
 
 @Service
 public class reviewMapper {
-    @Autowired
     private productRepo productRepo;
+
+    public reviewMapper(productRepo productRepo) {
+        this.productRepo = productRepo;
+    }
+
     public review tReview(reviewDto dto){
         var review = new review();
         review.setDate(dto.date());

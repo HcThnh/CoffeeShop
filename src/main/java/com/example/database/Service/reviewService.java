@@ -1,6 +1,5 @@
 package com.example.database.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Embedded.review_embed;
@@ -11,12 +10,20 @@ import com.example.database.Repository.reviewRepo;
 
 @Service
 public class reviewService {
-    @Autowired
     private reviewRepo repo;
-    @Autowired
     private reviewMapper reviewMapper;
-    @Autowired
     private customerRepo customerRepo;
+
+    public reviewService(
+        reviewRepo repo,
+        reviewMapper reviewMapper,
+        customerRepo customerRepo
+    ) {
+        this.repo = repo;
+        this.reviewMapper = reviewMapper;
+        this.customerRepo = customerRepo;
+    }
+
     public void createReview(reviewDto dto,String phoneNumber){
         var review = reviewMapper.tReview(dto);
         customerRepo.findByPhoneNumber(phoneNumber).addReview(review);

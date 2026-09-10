@@ -15,11 +15,7 @@ import com.example.database.Service.reviewService;
 import java.security.Principal;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,16 +28,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 @PreAuthorize("hasRole('CUSTOMER')")
 @RequestMapping("/customer")
 public class customerController {
-    @Autowired
-    DataSource dataSource;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
     private customerService customerService;
-    @Autowired
     private reviewService reviewService;
-    @Autowired
     private exchangeService exchangeService;
+
+    public customerController(
+        customerService customerService,
+        reviewService reviewService,
+        exchangeService exchangeService
+    ) {
+        this.customerService = customerService;
+        this.reviewService = reviewService;
+        this.exchangeService = exchangeService;
+    }
 
 
     @DeleteMapping("/delete")

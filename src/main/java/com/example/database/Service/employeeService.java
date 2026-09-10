@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +19,19 @@ import com.example.database.Repository.employeeRepo;
 
 @Service
 public class employeeService {
-    @Autowired
     private employeeRepo repo;
-    @Autowired
     private employeeMapper employeeMapper;
-    @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
+
+    public employeeService(
+        employeeRepo repo,
+        employeeMapper employeeMapper,
+        DataSource dataSource
+    ) {
+        this.repo = repo;
+        this.employeeMapper = employeeMapper;
+        this.dataSource = dataSource;
+    }
 
     public List<employeeResponseDto> findAllEmployee(){
         return repo.findAll().stream()

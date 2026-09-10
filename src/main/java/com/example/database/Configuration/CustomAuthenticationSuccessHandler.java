@@ -22,12 +22,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         throws IOException, ServletException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Collection<? extends GrantedAuthority> listRole = userDetails.getAuthorities();
-        String url;
+        String url = "/";
         for(var i: listRole){
             if(i.getAuthority().equals("ROLE_CUSTOMER")) url=""; //homepage of customer
             if(i.getAuthority().equals("ROLE_EMPLOYEE")) url="http://localhost:5173/emp/order-form";
             if(i.getAuthority().equals("ROLE_MANAGER")) url="http://localhost:5173/admin/home";
         }
-        response.sendRedirect("url");
+        response.sendRedirect(url);
     }
 }

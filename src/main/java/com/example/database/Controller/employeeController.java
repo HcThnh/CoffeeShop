@@ -3,7 +3,6 @@ package com.example.database.Controller;
 import java.security.Principal;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,12 +24,19 @@ import org.springframework.web.bind.annotation.PatchMapping;
 @PreAuthorize("hasRole('EMPLOYEE')")
 @RequestMapping("/employee")
 public class employeeController {
-    @Autowired
-    employeeService employeeService;
-    @Autowired
-    orderService orderService;
-    @Autowired
-    exchangeService exchangeService;
+    private employeeService employeeService;
+    private orderService orderService;
+    private exchangeService exchangeService;
+
+    public employeeController(
+        employeeService employeeService,
+        orderService orderService,
+        exchangeService exchangeService
+    ) {
+        this.employeeService = employeeService;
+        this.orderService = orderService;
+        this.exchangeService = exchangeService;
+    }
 
     @PostMapping("/order/create")
     public void createOrder(@RequestBody orderDto dto,Principal principal) {

@@ -2,8 +2,6 @@ package com.example.database.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Relationship.exchangeDto;
@@ -13,10 +11,17 @@ import com.example.database.Repository.exchangeRepo;
 
 @Service
 public class exchangeService {
-    @Autowired
     private exchangeRepo repo;
-    @Autowired
     private exchangeMapper exchangeMapper;
+
+    public exchangeService(
+        exchangeRepo repo,
+        exchangeMapper exchangeMapper
+    ) {
+        this.repo = repo;
+        this.exchangeMapper = exchangeMapper;
+    }
+
     public void createExchange(exchangeDto exchangeDto,String phoneNumber){
         repo.save(exchangeMapper.tExchange(exchangeDto, phoneNumber));
     }

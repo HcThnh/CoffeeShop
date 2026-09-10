@@ -1,18 +1,21 @@
 package com.example.database.Relationship;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.example.database.Repository.customerRepo;
 import com.example.database.Repository.giftRepo;
 
 @Service
 public class exchangeMapper {
-    @Autowired
     private customerRepo customerRepo;
-    @Autowired 
     private giftRepo giftRepo;
+
+    public exchangeMapper(
+        customerRepo customerRepo,
+        giftRepo giftRepo
+    ) {
+        this.customerRepo = customerRepo;
+        this.giftRepo = giftRepo;
+    }
 
     public exchangeResponseDto tExchangeResponseDto(exchange exchange){
         return new exchangeResponseDto(exchange.getQuantity(),exchange.getDate(),exchange.getCustomer().getName(),exchange.getGift().getName());

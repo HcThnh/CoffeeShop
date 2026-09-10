@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,24 +47,37 @@ import org.springframework.transaction.annotation.Transactional;
 @RequestMapping("/manager")
 @PreAuthorize("hasRole('MANAGER')")
 public class managerController {
-    @Autowired
-    DataSource dataSource;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    employeeService employeeService;
-    @Autowired
-    shiftService shiftService;
-    @Autowired
-    productService productService;
-    @Autowired
-    giftService giftService;
-    @Autowired
-    scheduleService scheduleService;
-    @Autowired
-    orderService orderService;
-    @Autowired
-    exchangeService exchangeService;
+    private DataSource dataSource;
+    private PasswordEncoder passwordEncoder;
+    private employeeService employeeService;
+    private shiftService shiftService;
+    private productService productService;
+    private giftService giftService;
+    private scheduleService scheduleService;
+    private orderService orderService;
+    private exchangeService exchangeService;
+
+    public managerController(
+        DataSource dataSource,
+        PasswordEncoder passwordEncoder,
+        employeeService employeeService,
+        shiftService shiftService,
+        productService productService,
+        giftService giftService,
+        scheduleService scheduleService,
+        orderService orderService,
+        exchangeService exchangeService
+    ) {
+        this.dataSource = dataSource;
+        this.passwordEncoder = passwordEncoder;
+        this.employeeService = employeeService;
+        this.shiftService = shiftService;
+        this.productService = productService;
+        this.giftService = giftService;
+        this.scheduleService = scheduleService;
+        this.orderService = orderService;
+        this.exchangeService = exchangeService;
+    }
 
     @Transactional
     @PostMapping("create/employee")

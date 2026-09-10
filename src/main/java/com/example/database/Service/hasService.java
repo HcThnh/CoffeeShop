@@ -1,6 +1,5 @@
 package com.example.database.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Order.orderDto;
@@ -11,12 +10,19 @@ import com.example.database.Relationship.has;
 
 @Service
 public class hasService {
-    @Autowired
-    hasRepo hasRepo;
-    @Autowired
-    productRepo productRepo;
-    @Autowired
-    orderRepo orderRepo;
+    private hasRepo hasRepo;
+    private productRepo productRepo;
+    private orderRepo orderRepo;
+
+    public hasService(
+        hasRepo hasRepo,
+        productRepo productRepo,
+        orderRepo orderRepo
+    ) {
+        this.hasRepo = hasRepo;
+        this.productRepo = productRepo;
+        this.orderRepo = orderRepo;
+    }
 
     public void createHas(orderDto dto,int orderId){
         var list = dto.producList();

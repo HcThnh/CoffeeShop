@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Product.productDto;
@@ -16,10 +15,17 @@ import com.example.database.Repository.productRepo;
 
 @Service
 public class productService {
-    @Autowired
     private productRepo repo;
-    @Autowired
     private productMapper mapper;
+
+    public productService(
+        productRepo repo,
+        productMapper mapper
+    ) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
+
     public void addProduct(productDto dto){
         repo.save(mapper.tProduct(dto));
     }

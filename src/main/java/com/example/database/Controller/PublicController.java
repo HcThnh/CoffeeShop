@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,20 +44,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/public")
 public class PublicController {
-    @Autowired
     private JwtUtils jwtUtils;
-    @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired 
     private customerService customerService;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    DataSource dataSource;
-    @Autowired
+    private PasswordEncoder passwordEncoder;
+    private DataSource dataSource;
     private productService productService;
-    @Autowired
     private giftService giftService;
+
+    public PublicController(
+        JwtUtils jwtUtils,
+        AuthenticationManager authenticationManager,
+        customerService customerService,
+        PasswordEncoder passwordEncoder,
+        DataSource dataSource,
+        productService productService,
+        giftService giftService
+    ) {
+        this.jwtUtils = jwtUtils;
+        this.authenticationManager = authenticationManager;
+        this.customerService = customerService;
+        this.passwordEncoder = passwordEncoder;
+        this.dataSource = dataSource;
+        this.productService = productService;
+        this.giftService = giftService;
+    }
+
     
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {

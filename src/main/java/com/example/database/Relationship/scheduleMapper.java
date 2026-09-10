@@ -1,6 +1,5 @@
 package com.example.database.Relationship;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.database.Repository.employeeRepo;
@@ -9,12 +8,20 @@ import com.example.database.Shift.shiftMapper;
 
 @Service
 public class scheduleMapper {
-    @Autowired
     private employeeRepo employeeRepo;
-    @Autowired
     private shiftRepo shiftRepo;
-    @Autowired
     private shiftMapper shiftMapper;
+
+    public scheduleMapper(
+        employeeRepo employeeRepo,
+        shiftRepo shiftRepo,
+        shiftMapper shiftMapper
+    ) {
+        this.employeeRepo = employeeRepo;
+        this.shiftRepo = shiftRepo;
+        this.shiftMapper = shiftMapper;
+    }
+
     public schedule tSchedule(scheduleDto dto){
         var schedule = new schedule();
         schedule.getId().setDate(dto.date());

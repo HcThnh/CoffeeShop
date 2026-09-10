@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +22,25 @@ import com.example.database.Repository.customerRepo;
 
 @Service
 public class customerService {
-    @Autowired
     private customerRepo repo;
-    @Autowired
     private exchangeMapper exchangeMapper;
-    @Autowired
     private orderMapper orderMapper;
-    @Autowired
     private customerMapper customerMapper;
-    @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
+
+    public customerService(
+        customerRepo customerRepo,
+        exchangeMapper exchangeMapper,
+        orderMapper orderMapper,
+        customerMapper customerMapper,
+        DataSource dataSource
+    ) {
+        this.repo = customerRepo;
+        this.exchangeMapper = exchangeMapper;
+        this.orderMapper = orderMapper;
+        this.customerMapper = customerMapper;
+        this.dataSource = dataSource;
+    }
 
     public customerUpdateDto getInfo(String phoneNumber){
         var customer = repo.findByPhoneNumber(phoneNumber);
