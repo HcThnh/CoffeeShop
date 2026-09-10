@@ -1,4 +1,4 @@
-package com.example.database.Repository;
+package com.example.database.repository;
 
 import java.sql.Date;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Customer.customer;
+import com.example.database.entity.customer;
 
 
 public interface customerRepo extends JpaRepository<customer,Integer>{

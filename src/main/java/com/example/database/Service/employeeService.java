@@ -1,4 +1,4 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,13 +9,13 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Employee.employeeCalSalaryDto;
-import com.example.database.Employee.employeeDto;
-import com.example.database.Employee.employeeMapper;
-import com.example.database.Employee.employeeResponseDto;
-import com.example.database.Employee.employeeUpdateDto;
-import com.example.database.Employee.employeeUpdateJobDto;
-import com.example.database.Repository.employeeRepo;
+import com.example.database.util.mapper.employeeMapper;
+import com.example.database.dto.request.employeeDto;
+import com.example.database.dto.request.employeeUpdateDto;
+import com.example.database.dto.request.employeeUpdateJobDto;
+import com.example.database.dto.request.employeeCalSalaryDto;
+import com.example.database.dto.response.employeeResponseDto;
+import com.example.database.repository.employeeRepo;
 
 @Service
 public class employeeService {

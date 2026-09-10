@@ -1,14 +1,14 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.database.Repository.shiftRepo;
-import com.example.database.Shift.shiftDto;
-import com.example.database.Shift.shiftMapper;
-import com.example.database.Shift.shiftResponseDto;
+import com.example.database.util.mapper.shiftMapper;
+import com.example.database.repository.shiftRepo;
+import com.example.database.dto.request.shiftDto;
+import com.example.database.dto.response.shiftResponseDto;
 
 @Service
 public class shiftService {

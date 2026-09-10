@@ -1,12 +1,12 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.database.Embedded.review_embed;
-import com.example.database.Relationship.reviewDto;
-import com.example.database.Relationship.reviewMapper;
-import com.example.database.Repository.customerRepo;
-import com.example.database.Repository.reviewRepo;
+import com.example.database.util.mapper.reviewMapper;
+import com.example.database.dto.request.reviewDto;
+import com.example.database.repository.customerRepo;
+import com.example.database.repository.reviewRepo;
+import com.example.database.entity.embedded.review_embed;
 
 @Service
 public class reviewService {

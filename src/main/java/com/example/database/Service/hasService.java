@@ -1,12 +1,12 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import org.springframework.stereotype.Service;
 
-import com.example.database.Order.orderDto;
-import com.example.database.Repository.hasRepo;
-import com.example.database.Repository.orderRepo;
-import com.example.database.Repository.productRepo;
-import com.example.database.Relationship.has;
+import com.example.database.repository.hasRepo;
+import com.example.database.repository.productRepo;
+import com.example.database.repository.orderRepo;
+import com.example.database.dto.request.orderDto;
+import com.example.database.entity.has;
 
 @Service
 public class hasService {

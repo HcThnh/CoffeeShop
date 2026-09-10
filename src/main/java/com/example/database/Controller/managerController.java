@@ -1,4 +1,4 @@
-package com.example.database.Controller;
+package com.example.database.controller;
 
 import java.util.List;
 
@@ -14,27 +14,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.database.Employee.employeeCalSalaryDto;
-import com.example.database.Employee.employeeDto;
-import com.example.database.Employee.employeeResponseDto;
-import com.example.database.Employee.employeeUpdateJobDto;
-import com.example.database.Gift.giftDto;
-import com.example.database.Gift.giftResponseDto;
-import com.example.database.Order.orderResponseDto;
-import com.example.database.Product.productDto;
-import com.example.database.Product.productUpdateDto;
-import com.example.database.Relationship.exchangeResponseDto;
-import com.example.database.Relationship.scheduleDto;
-import com.example.database.Relationship.scheduleResponseDto;
-import com.example.database.Service.employeeService;
-import com.example.database.Service.exchangeService;
-import com.example.database.Service.giftService;
-import com.example.database.Service.orderService;
-import com.example.database.Service.productService;
-import com.example.database.Service.scheduleService;
-import com.example.database.Service.shiftService;
-import com.example.database.Shift.shiftDto;
-import com.example.database.Shift.shiftResponseDto;
+import com.example.database.dto.request.employeeDto;
+import com.example.database.dto.request.shiftDto;
+import com.example.database.dto.request.productDto;
+import com.example.database.dto.request.giftDto;
+import com.example.database.dto.request.scheduleDto;
+import com.example.database.dto.request.employeeCalSalaryDto;
+import com.example.database.dto.request.employeeUpdateJobDto;
+import com.example.database.dto.request.productUpdateDto;
+import com.example.database.dto.response.employeeResponseDto;
+import com.example.database.dto.response.shiftResponseDto;
+import com.example.database.dto.response.giftResponseDto;
+import com.example.database.dto.response.scheduleResponseDto;
+import com.example.database.dto.response.orderResponseDto;
+import com.example.database.dto.response.exchangeResponseDto;
+
+import com.example.database.service.employeeService;
+import com.example.database.service.exchangeService;
+import com.example.database.service.giftService;
+import com.example.database.service.orderService;
+import com.example.database.service.productService;
+import com.example.database.service.scheduleService;
+import com.example.database.service.shiftService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

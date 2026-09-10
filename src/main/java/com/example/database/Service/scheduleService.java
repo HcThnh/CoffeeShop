@@ -1,4 +1,4 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Embedded.schedule_embed;
-import com.example.database.Relationship.scheduleDto;
-import com.example.database.Relationship.scheduleMapper;
-import com.example.database.Relationship.scheduleResponseDto;
-import com.example.database.Repository.scheduleRepo;
+import com.example.database.util.mapper.scheduleMapper;
+import com.example.database.repository.scheduleRepo;
+import com.example.database.dto.request.scheduleDto;
+import com.example.database.dto.response.scheduleResponseDto;
+import com.example.database.entity.embedded.schedule_embed;
 
 @Service
 public class scheduleService {

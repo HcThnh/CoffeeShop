@@ -1,4 +1,4 @@
-package com.example.database.Repository;
+package com.example.database.repository;
 
 
 
@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.database.Employee.employee;
-
+import com.example.database.entity.employee;
 
 import jakarta.transaction.Transactional;
 

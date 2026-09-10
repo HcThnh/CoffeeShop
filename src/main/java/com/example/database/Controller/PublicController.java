@@ -1,4 +1,4 @@
-package com.example.database.Controller;
+package com.example.database.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +24,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.database.Customer.customerDTO;
-import com.example.database.Gift.giftResponseDto;
-import com.example.database.Product.productResponseDto;
-import com.example.database.Relationship.reviewResponseDto;
-import com.example.database.Service.customerService;
-import com.example.database.Service.giftService;
-import com.example.database.Service.productService;
-import com.example.database.jwt.JwtUtils;
-import com.example.database.jwt.LoginRequest;
-import com.example.database.jwt.LoginResponse;
-
+import com.example.database.dto.request.LoginRequest;
+import com.example.database.dto.response.LoginResponse;
+import com.example.database.util.JwtUtils;
+import com.example.database.service.customerService;
+import com.example.database.service.productService;
+import com.example.database.service.giftService;
+import com.example.database.dto.request.customerDTO;
+import com.example.database.dto.response.productResponseDto;
+import com.example.database.dto.response.giftResponseDto;
+import com.example.database.dto.response.reviewResponseDto;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 

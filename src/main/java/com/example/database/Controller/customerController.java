@@ -1,16 +1,16 @@
-package com.example.database.Controller;
+package com.example.database.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.database.Customer.customerUpdateDto;
-import com.example.database.Order.orderResponseDto;
-import com.example.database.Relationship.exchangeDto;
-import com.example.database.Relationship.exchangeResponseDto;
-import com.example.database.Relationship.reviewDto;
-import com.example.database.Service.customerService;
-import com.example.database.Service.exchangeService;
-import com.example.database.Service.reviewService;
+import com.example.database.service.exchangeService;
+import com.example.database.service.reviewService;
+import com.example.database.dto.request.customerUpdateDto;
+import com.example.database.dto.request.exchangeDto;
+import com.example.database.dto.request.reviewDto;
+import com.example.database.dto.response.exchangeResponseDto;
+import com.example.database.dto.response.orderResponseDto;
+import com.example.database.service.customerService;
 
 import java.security.Principal;
 import java.util.List;

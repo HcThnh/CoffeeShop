@@ -1,13 +1,13 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
-import com.example.database.Gift.giftDto;
-import com.example.database.Gift.giftMapper;
-import com.example.database.Gift.giftResponseDto;
-import com.example.database.Repository.giftRepo;
+import com.example.database.util.mapper.giftMapper;
+import com.example.database.repository.giftRepo;
+import com.example.database.dto.request.giftDto;
+import com.example.database.dto.response.giftResponseDto;
 
 @Service
 public class giftService {

@@ -1,4 +1,4 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.database.Product.productDto;
-import com.example.database.Product.productMapper;
-import com.example.database.Product.productResponseDto;
-import com.example.database.Product.productUpdateDto;
-import com.example.database.Relationship.reviewResponseDto;
-import com.example.database.Repository.productRepo;
+import com.example.database.util.mapper.productMapper;
+import com.example.database.dto.request.productDto;
+import com.example.database.dto.request.productUpdateDto;
+import com.example.database.dto.response.productResponseDto;
+import com.example.database.dto.response.reviewResponseDto;
+import com.example.database.repository.productRepo;
 
 @Service
 public class productService {

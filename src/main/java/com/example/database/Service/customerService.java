@@ -1,4 +1,4 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,14 +10,14 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Customer.customerDTO;
-import com.example.database.Customer.customerMapper;
-import com.example.database.Customer.customerUpdateDto;
-import com.example.database.Order.orderMapper;
-import com.example.database.Order.orderResponseDto;
-import com.example.database.Relationship.exchangeMapper;
-import com.example.database.Relationship.exchangeResponseDto;
-import com.example.database.Repository.customerRepo;
+import com.example.database.util.mapper.exchangeMapper;
+import com.example.database.util.mapper.orderMapper;
+import com.example.database.util.mapper.customerMapper;
+import com.example.database.dto.request.customerDTO;
+import com.example.database.dto.request.customerUpdateDto;
+import com.example.database.dto.response.exchangeResponseDto;
+import com.example.database.dto.response.orderResponseDto;
+import com.example.database.repository.customerRepo;
 
 
 @Service

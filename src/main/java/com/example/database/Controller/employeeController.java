@@ -1,4 +1,4 @@
-package com.example.database.Controller;
+package com.example.database.controller;
 
 import java.security.Principal;
 import java.util.List;
@@ -7,12 +7,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.database.Employee.employeeUpdateDto;
-import com.example.database.Order.orderDto;
-import com.example.database.Relationship.exchangeResponseDto;
-import com.example.database.Service.employeeService;
-import com.example.database.Service.exchangeService;
-import com.example.database.Service.orderService;
+import com.example.database.service.orderService;
+import com.example.database.dto.response.exchangeResponseDto;
+import com.example.database.dto.request.employeeUpdateDto;
+import com.example.database.dto.request.orderDto;
+import com.example.database.service.employeeService;
+import com.example.database.service.exchangeService;
+
+
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

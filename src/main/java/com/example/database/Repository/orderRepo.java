@@ -1,10 +1,11 @@
-package com.example.database.Repository;
+package com.example.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.database.Order._order;
+import com.example.database.entity._order;
+
 import java.util.List;
 
 

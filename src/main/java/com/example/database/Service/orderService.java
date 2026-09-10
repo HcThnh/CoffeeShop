@@ -1,14 +1,14 @@
-package com.example.database.Service;
+package com.example.database.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.database.Order.orderDto;
-import com.example.database.Order.orderMapper;
-import com.example.database.Order.orderResponseDto;
-import com.example.database.Repository.orderRepo;
+import com.example.database.util.mapper.orderMapper;
+import com.example.database.dto.request.orderDto;
+import com.example.database.dto.response.orderResponseDto;
+import com.example.database.repository.orderRepo;
 
 @Service
 public class orderService {

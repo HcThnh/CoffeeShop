@@ -1,4 +1,4 @@
-package com.example.database.Repository;
+package com.example.database.repository;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.database.Gift.gift;
+import com.example.database.entity.gift;
 
 
 public interface giftRepo extends JpaRepository<gift,Integer>{
