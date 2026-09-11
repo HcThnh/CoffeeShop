@@ -31,23 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/public/**", "/error").permitAll()
                         .anyRequest().authenticated()
         );
-        // .logout((logout) ->
-        //          logout.deleteCookies("remove")
-        //              .invalidateHttpSession(true)
-        //              .logoutUrl("/logout")
-        //              .logoutSuccessUrl("/logout-success")
-                // );
-        // http.sessionManagement(
-        //         session ->
-        //                 session.sessionCreationPolicy(
-        //                         SessionCreationPolicy.STATELESS)
-        // );
-        // http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
-        // http.formLogin(formLogin -> 
-        //         formLogin.loginProcessingUrl("/public/signin") // Endpoint nhận yêu cầu đăng nhập từ React
-        //         .successHandler(customAuthenticationSuccessHandler) // Gắn success handler
-        //         .permitAll()
-        // );
+        
         http.httpBasic(withDefaults());
         http.headers(headers -> headers
                 .frameOptions(frameOptions -> frameOptions
