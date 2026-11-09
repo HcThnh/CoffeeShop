@@ -122,3 +122,25 @@ Dự án đã cấu hình sẵn [Dockerfile](file:///d:/Documents/BK4/CoffeeShop
    ```bash
    docker run -p 8080:8080 coffeeshop-backend
    ```
+
+---
+
+## Ảnh sản phẩm
+
+Backend lưu URL ảnh và thông tin hiển thị trong bảng `product_images`; file ảnh cần được lưu tại dịch vụ lưu trữ bên ngoài trước khi gửi URL vào API. URL chỉ chấp nhận HTTP/HTTPS.
+
+* `GET /public/menu`: trả danh sách sản phẩm kèm `images`.
+* `GET /public/products/{id}`: trả chi tiết sản phẩm cùng toàn bộ ảnh.
+* `POST /manager/products/{productId}/images`: thêm ảnh (yêu cầu quyền MANAGER), body:
+  ```json
+  {
+    "imageUrl": "https://cdn.example.com/products/latte.webp",
+    "altText": "Ly Latte",
+    "sortOrder": 0,
+    "primary": true
+  }
+  ```
+* `PATCH /manager/products/{productId}/images/{imageId}/primary`: đặt ảnh chính.
+* `DELETE /manager/products/{productId}/images/{imageId}`: xóa ảnh. Nếu ảnh chính bị xóa, ảnh đầu tiên còn lại sẽ tự động thành ảnh chính.
+
+Phản hồi sản phẩm có dạng `images: [{ id, imageUrl, altText, sortOrder, primary }]`. Nếu chưa có ảnh, danh sách `images` rỗng; giao diện nên hiển thị ảnh mặc định trong trường hợp này.

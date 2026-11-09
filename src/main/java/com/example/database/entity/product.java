@@ -6,11 +6,15 @@ import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -36,6 +40,17 @@ public class product {
     private List<review> reviews= new ArrayList<>();
     @OneToMany(mappedBy = "product")
     private List<has> hases= new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("sortOrder ASC, id ASC")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<productImage> images = new ArrayList<>();
+
+    public void addImage(productImage image) {
+        images.add(image);
+        image.setProduct(this);
+    }
+
     public void addHas(has has){
         this.hases.add(has);
         has.setProduct(this);

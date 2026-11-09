@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -130,6 +131,10 @@ public class PublicController {
     @GetMapping("/menu")
     public List<productResponseDto> getAllProducts() {
         return productService.getAllProducts();
+    }
+    @GetMapping("/products/{id}")
+    public productResponseDto getProduct(@PathVariable int id) {
+        return productService.getProduct(id);
     }
     @GetMapping("/gift/view")
     public List<giftResponseDto> getAllGifts() {

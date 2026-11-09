@@ -11,3 +11,15 @@ CREATE TABLE IF NOT EXISTS authorities (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS ix_auth_username on authorities (username,authority);
+
+CREATE TABLE IF NOT EXISTS product_images (
+    id BIGSERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    alt_text VARCHAR(255),
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_primary BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE INDEX IF NOT EXISTS idx_product_images_product_order
+    ON product_images (product_id, sort_order);

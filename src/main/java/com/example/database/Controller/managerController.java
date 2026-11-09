@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.database.dto.request.employeeDto;
 import com.example.database.dto.request.shiftDto;
 import com.example.database.dto.request.productDto;
+import com.example.database.dto.request.productImageRequestDto;
 import com.example.database.dto.request.giftDto;
 import com.example.database.dto.request.scheduleDto;
 import com.example.database.dto.request.employeeCalSalaryDto;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -106,6 +108,18 @@ public class managerController {
     @PostMapping("/create/product")
     public void createProduct(@RequestBody productDto dto) {
         productService.addProduct(dto);
+    }
+    @PostMapping("/products/{productId}/images")
+    public void addProductImage(@PathVariable int productId, @RequestBody productImageRequestDto dto) {
+        productService.addProductImage(productId, dto);
+    }
+    @DeleteMapping("/products/{productId}/images/{imageId}")
+    public void deleteProductImage(@PathVariable int productId, @PathVariable Long imageId) {
+        productService.deleteProductImage(productId, imageId);
+    }
+    @PatchMapping("/products/{productId}/images/{imageId}/primary")
+    public void setPrimaryProductImage(@PathVariable int productId, @PathVariable Long imageId) {
+        productService.setPrimaryProductImage(productId, imageId);
     }
     @PostMapping("/create/gift")
     public void createGift(@RequestBody giftDto dto) {

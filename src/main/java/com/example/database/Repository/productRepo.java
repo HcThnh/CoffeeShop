@@ -1,6 +1,7 @@
 package com.example.database.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +13,11 @@ import java.util.List;
 
 
 public interface productRepo extends JpaRepository<product,Integer>{
+    @EntityGraph(attributePaths = "images")
     List<product> findByIsAvailable(boolean isAvailable);
+
+    @EntityGraph(attributePaths = "images")
+    java.util.Optional<product> findWithImagesByIdAndIsAvailableTrue(int id);
     @Modifying
     @Transactional
     @Query("update product a set a.isAvailable=false where a.id=:id")
